@@ -3,10 +3,11 @@ export INCLUDES = -I${PWD}/application
 export SOURCE_MAIN = ${PWD}
 
 all:
-	#make	 -C ./application
-	make  -C tests -f Makefile.local
+	make	 -C ./application
+	#make  -C tests -f Makefile.local
 clean:
 	rm -rf build/bin/*
 	rm -rf build/obj/*
+	rm -rf build/lib/*
 test:
 	make -C ./tests

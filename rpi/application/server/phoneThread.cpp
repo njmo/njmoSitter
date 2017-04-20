@@ -10,14 +10,16 @@
 void phoneThread::test()
 { // ssss
 	for(int i=0;i<20;i++)
-	{
-		usleep(500);
+	{//asas
+		usleep(1000);
 		std::cout << message;//as/asdsdsd
 	}
 }
 
 phoneThread::~phoneThread() {
 	// TODO Auto-generated destructor stub
+	std::cout << "dying";
 	this->join();
+	std::cout << "dying2";
 }
 

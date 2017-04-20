@@ -1,39 +1,36 @@
 cpp = g++
 CFLAGS = -Wall -g -std=c++14
 INCLUDES += -I./inc
+L_LIBS = -L$(PWD)/build/lib
 
 # LFLAGS = -L../lib
 LIBS =	-lpthread
-
+ODIR = $(SOURCE_MAIN)/build/obj
 # List of all source files
-SRCS =	rpi.cpp	server/phoneThread.cpp
+SRCS =	rpi.cpp
 
-# Object files defined from source files
-OBJS = $(SRCS:.cpp=.o)
+vpath %.cpp $(PWD)/application
 
-# # define the executable file 
-MAIN = rpi
+${info $(PWD)/application}
 
-#List of non-file based targets:
+include Make/*
+
+BDIR = $(SOURCE_MAIN)/build/bin
+
+_OBJS = $(notdir $(SRCS:.cpp=.o))
+OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
+
+MAIN = $(SOURCE_MAIN)/build/bin/rpi
+
 .PHONY: depend clean all
-
-##  .DEFAULT_GOAL := all
-
-# List of dependencies defined from list of object files
-DEPS := $(OBJS:.o=.d)
 
 all: $(MAIN)
 
--include $(DEPS)
-
 $(MAIN): $(OBJS)
-	$(cpp)	$(CFLAGS)	$(INCLUDES)	-o	$(MAIN)	$(OBJS)	$(LFLAGS)	$(LIBS)
+	$(cpp) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(L_LIBS) $(LIBS) $(LFLAGS) $(LD_FLAGS)
 
-#suffix replacement rule for building .o's from .cpp's
-#build dependency files first, second line actually compiles into .o
-.cpp.o:
-	$(cpp) $(CFLAGS) $(INCLUDES) -c -MM -MF $(patsubst %.o,%.d,$@) $<
-	$(cpp) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+$(ODIR)/%.o: %.cpp
+	${info $< ---- $@}
+	$(cpp) $(CFLAGS) $(LIBS) $(INCLUDES) -fPIC -c -o $@ $<
 	
-clean:
-	rm -rf *.o rpi
+

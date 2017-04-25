@@ -8,5 +8,7 @@ AUX_SOURCE_DIRECTORY("${PROJECT_SOURCE_DIR}/OtherOtherBasicTest" OtherOtherBasic
 
 ADD_EXECUTABLE("${PROJECT_NAME}" "testMain.cpp" ${OtherBasicTest_SOURCES} ${OtherOtherBasicTest_SOURCES})
 target_link_libraries("${PROJECT_NAME}" PRIVATE gmock gmock_main) 
+target_link_libraries("${PROJECT_NAME}" LINK_PUBLIC server)
+target_link_libraries("${PROJECT_NAME}" LINK_PUBLIC testLibrary)
 
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}" "${gmock_SOURCE_DIR}/include" "${gtest_SOURCE_DIR}/include")

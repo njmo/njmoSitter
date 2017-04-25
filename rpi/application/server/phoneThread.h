@@ -12,7 +12,7 @@
 
 #include <thread>
 #include <unistd.h>
-#include <inc/Messages.hpp>
+#include <Messages.hpp>
 #include "testSource.h"
 
 class phoneThread : public std::thread//asdas

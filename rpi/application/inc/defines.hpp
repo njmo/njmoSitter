@@ -26,6 +26,5 @@ enum class msgID: u8
 	MESSAGE_IN=0,
 	MESSAGE_OUT
 };
-#define PACKED_STRUCT(name) struct #name
 
 #endif /* DEFINES_HPP_ */

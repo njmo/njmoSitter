@@ -13,12 +13,11 @@
 #include <thread>
 #include <unistd.h>
 #include <Messages.hpp>
-#include "testSource.h"
 
 class phoneThread : public std::thread//asdas
 {
 public:
-	phoneThread(): std::thread(&phoneThread::test, this), message("Hello, Wrld!") { test();}
+	phoneThread(): std::thread(&phoneThread::test, this), message("Hello, Wrld!") { }
 	virtual void test();//sdfdfsasfdfdssdasdasasdd
 	std::string message;
 	std::string message2;

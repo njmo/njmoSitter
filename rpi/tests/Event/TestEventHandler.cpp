@@ -6,12 +6,12 @@
  */
 
 #include <EventQueue.hpp>
+#include <EventHandler.hpp>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-TEST(MyString, ConstructorFromCString) {
-	A a;
-	testClass testc;
+TEST(TestEventHandler, testNameForEventHandler) {
+	event::EventHandler handler;
   EXPECT_EQ(0, 0);
 
 }

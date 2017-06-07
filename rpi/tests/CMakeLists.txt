@@ -13,4 +13,4 @@ target_link_libraries("${PROJECT_NAME}" LINK_PUBLIC server)
 target_link_libraries("${PROJECT_NAME}" LINK_PUBLIC testLibrary)
 target_link_libraries("${PROJECT_NAME}" LINK_PUBLIC EventMain)
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}" "${gmock_SOURCE_DIR}/include" "${gtest_SOURCE_DIR}/include" "../application/event/")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}" "${gmock_SOURCE_DIR}/include" "${gtest_SOURCE_DIR}/include")

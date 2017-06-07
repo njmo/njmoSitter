@@ -2,6 +2,7 @@ project(event)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_library(EventQueue OBJECT EventQueue.cpp EventQueue.hpp Event.hpp EEventType.hpp)
+add_library(EventQueue OBJECT EventQueue.cpp)
 
-add_library(EventMain EventHandler.cpp EventHandler.hpp EventMain.hpp EventMain.cpp $<TARGET_OBJECTS:EventQueue>)
+add_library(EventMain EventHandler.cpp EventMain.cpp $<TARGET_OBJECTS:EventQueue>)
+target_include_directories(EventMain PUBLIC "${PROJECT_SOURCE_DIR}")

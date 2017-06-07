@@ -3,6 +3,7 @@ project(application)
 
 add_subdirectory(server)
 add_subdirectory(testLibrary)
+add_subdirectory(event)
 
 include_directories("${PROJECT_SOURCE_DIR}")
 

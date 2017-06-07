@@ -9,6 +9,7 @@
 #define APPLICATION_EVENT_EVENT_HPP_
 
 #include <EEventType.hpp>
+#include <defines.hpp>
 
 namespace event {
 

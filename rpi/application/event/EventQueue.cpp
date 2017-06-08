@@ -9,13 +9,24 @@
 
 namespace event {
 
-EventQueue::EventQueue() {
-	// TODO Auto-generated constructor stub
-
+Event* EventQueue::pop()
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	Event *event = eventList.front();
+	eventList.pop_front();
+	return event;
 }
 
-EventQueue::~EventQueue() {
-	// TODO Auto-generated destructor stub
+void EventQueue::push(Event * event)
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	eventList.push_back(event);
+}
+
+void EventQueue::pushImportant(Event * event)
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	eventList.push_front(event);
 }
 
 } /* namespace event */

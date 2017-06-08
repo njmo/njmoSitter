@@ -14,9 +14,8 @@ namespace event {
 
 class EventMain {
 public:
-	EventMain(EventQueue &queue)
-		:eventQueue(queue),
-		 eventHandler(),
+	EventMain()
+		:eventHandler(),
 		 suspended(false),
 		 stopped(false)
 	{
@@ -30,7 +29,6 @@ public:
 	bool isRunning() { return !stopped; }
 	virtual ~EventMain();
 private:
-	EventQueue& eventQueue;
 	EventHandler eventHandler;
 	bool suspended;
 	bool stopped;

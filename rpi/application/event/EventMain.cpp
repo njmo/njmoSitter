@@ -19,7 +19,7 @@ void EventMain::mainLoop()
 	{
 		while(isSuspended())
 			;
-		Event *event = eventQueue.popEvent();
+		Event *event = EventQueue::getInstance().pop();
 		eventHandler.handleEvent(event);
 		delete event;
 	}

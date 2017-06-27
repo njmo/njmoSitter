@@ -20,12 +20,20 @@ EventHandler::~EventHandler() {
 
 void handleEvent(Event *event)
 {
+	//logInfo "handled new Event"
+	executor::EventExecutor *eventExecutor = nullptr;
+
 	switch(event->type)
 	{
 		default:
 		{
 			break;
 		}
+	}
+
+	if( eventExecutor->execute(event->payload) != executor::Status_OK )
+	{
+		//logERROR
 	}
 }
 

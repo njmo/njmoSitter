@@ -13,6 +13,7 @@
 #include <thread>
 #include <unistd.h>
 #include <Messages.hpp>
+#include <EventQueue.hpp>
 
 class phoneThread : public std::thread//asdas
 {

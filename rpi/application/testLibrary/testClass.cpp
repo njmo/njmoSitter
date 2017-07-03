@@ -8,14 +8,13 @@
 #include "testClass.h"
 
 testClass::testClass() {
-
-	std::cout << "costam robie";
+	nannyLogInfo("ala ma kota");
 	// TODO Auto-generated constructor stub
 
 }
 
 testClass::~testClass() {
-	std::cout << "costam nierobie";
+	nannyLogInfo("ala ma kota");
 	// TODO Auto-generated destructor stub
 }
 

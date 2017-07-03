@@ -25,6 +25,11 @@ void handleEvent(Event *event)
 
 	switch(event->type)
 	{
+		case LoggerEvent:
+		{
+
+			break;
+		}
 		default:
 		{
 			break;

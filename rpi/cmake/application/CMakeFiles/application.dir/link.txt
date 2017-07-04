@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/application.dir/rpi.cpp.o  -o application event/queue/libqueue.a event/libevent_machine.a testLibrary/libtestLibrary.a utils/libutils.a 

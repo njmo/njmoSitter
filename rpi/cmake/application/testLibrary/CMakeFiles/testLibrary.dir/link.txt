@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtestLibrary.a  CMakeFiles/testLibrary.dir/testClass.cpp.o
+/usr/bin/ranlib libtestLibrary.a

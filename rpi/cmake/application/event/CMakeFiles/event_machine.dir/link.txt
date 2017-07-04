@@ -1,0 +1,2 @@
+/usr/bin/ar qc libevent_machine.a  CMakeFiles/event_machine.dir/core/EventHandler.cpp.o CMakeFiles/event_machine.dir/core/EventMain.cpp.o executors/CMakeFiles/executors.dir/EventExecutor.cpp.o executors/CMakeFiles/executors.dir/TestExecutor.cpp.o
+/usr/bin/ranlib libevent_machine.a

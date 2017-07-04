@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../application/inc/defines.hpp
+
+../application/utils/Logger/Logger.hpp
+string
+-
+list
+-
+iostream
+-
+inc/defines.hpp
+-
+ctime
+-
+
+/home/njmo/njmositter/rpi/application/testLibrary/testClass.cpp
+testClass.h
+/home/njmo/njmositter/rpi/application/testLibrary/testClass.h
+
+/home/njmo/njmositter/rpi/application/testLibrary/testClass.h
+iostream
+-
+utils/Logger/Logger.hpp
+-
+

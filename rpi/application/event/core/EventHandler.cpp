@@ -18,7 +18,7 @@ EventHandler::~EventHandler() {
 	// TODO Auto-generated destructor stub
 }
 
-void handleEvent(Event *event)
+void EventHandler::handleEvent(Event *event)
 {
 	//logInfo "handled new Event"
 	executor::EventExecutor *eventExecutor = nullptr;

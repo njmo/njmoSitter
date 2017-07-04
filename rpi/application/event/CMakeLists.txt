@@ -1,10 +1,12 @@
-project(event)
+project(event_machine)
 
-include_directories(${PROJECT_SOURCE_DIR})
+include_directories("${PROJECT_SOURCE_DIR}")
 
-add_library(EventQueue EventQueue.cpp)
-target_include_directories(EventQueue PUBLIC "${PROJECT_SOURCE_DIR}")
+add_subdirectory(queue)
+add_subdirectory(executors)
 
-add_library(EventMain EventHandler.cpp EventMain.cpp)
-target_link_libraries(EventMain PRIVATE EventQueue)
-target_include_directories(EventMain PUBLIC "${PROJECT_SOURCE_DIR}")
+aux_source_directory("${PROJECT_SOURCE_DIR}/core" CORE_SRC)
+
+add_library(${PROJECT_NAME} STATIC ${CORE_SRC} $<TARGET_OBJECTS:executors>)
+#target_link_libraries(${PROJECT_NAME} PRIVATE )
+#target_include_directories(${PROJECT_NAME} PUBLIC "${PROJECT_SOURCE_DIR}")

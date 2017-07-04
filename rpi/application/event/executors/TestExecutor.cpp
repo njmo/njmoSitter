@@ -12,6 +12,7 @@ namespace executor{
 
 TestExecutor::TestExecutor() {
 	// TODO Auto-generated constructor stub
+	nannyLogInfo("ala ma kota");
 
 }
 

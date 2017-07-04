@@ -10,7 +10,7 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <defines.hpp>
+#include <inc/defines.hpp>
 #include <ctime>
 
 #define nannyLogInfo(x) utils::Logger::getLogger().logInfo("INF/{function : " + std::string(__FUNCTION__) + "}\t" + x)

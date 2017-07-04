@@ -8,7 +8,7 @@
 #ifndef TESTCLASS_H_
 #define TESTCLASS_H_
 #include <iostream>
-#include <Logger.hpp>
+#include <utils/Logger/Logger.hpp>
 
 class testClass {
 public:

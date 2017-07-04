@@ -7,8 +7,8 @@
 
 #ifndef APPLICATION_EVENT_EVENTMAIN_HPP_
 #define APPLICATION_EVENT_EVENTMAIN_HPP_
-#include <EventHandler.hpp>
-#include <EventQueue.hpp>
+#include "EventHandler.hpp"
+#include <event/queue/EventQueue.hpp>
 
 namespace event {
 

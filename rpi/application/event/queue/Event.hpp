@@ -8,7 +8,7 @@
 #ifndef APPLICATION_EVENT_EVENT_HPP_
 #define APPLICATION_EVENT_EVENT_HPP_
 
-#include <defines.hpp>
+#include <inc/defines.hpp>
 #include "EventType.hpp"
 
 namespace event {
@@ -20,7 +20,5 @@ struct Event
 };
 
 }
-
-
 
 #endif /* APPLICATION_EVENT_EVENT_HPP_ */

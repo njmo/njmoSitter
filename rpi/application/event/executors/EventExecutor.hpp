@@ -7,7 +7,8 @@
 
 #ifndef APPLICATION_EVENT_EVENTEXECUTOR_HPP_
 #define APPLICATION_EVENT_EVENTEXECUTOR_HPP_
-#include <defines.hpp>
+#include <inc/defines.hpp>
+#include <utils/Logger/Logger.hpp>
 
 namespace event {
 namespace executor {

@@ -7,7 +7,7 @@
 
 #ifndef APPLICATION_EVENT_EVENTQUEUE_HPP_
 #define APPLICATION_EVENT_EVENTQUEUE_HPP_
-#include <Event.hpp>
+#include <event/queue/Event.hpp>
 #include <list>
 #include <thread>
 #include <mutex>

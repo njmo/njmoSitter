@@ -12,8 +12,12 @@ namespace event {
 Event* EventQueue::pop()
 {
 	std::lock_guard<std::mutex> lock(mutex);
-	Event *event = eventList.front();
-	eventList.pop_front();
+	Event *event = nullptr;
+	if(!eventList.empty())
+	{
+		event = eventList.front();
+		eventList.pop_front();
+	}
 	return event;
 }
 

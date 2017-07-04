@@ -8,5 +8,5 @@ add_subdirectory(executors)
 aux_source_directory("${PROJECT_SOURCE_DIR}/core" CORE_SRC)
 
 add_library(${PROJECT_NAME} STATIC ${CORE_SRC} $<TARGET_OBJECTS:executors>)
-#target_link_libraries(${PROJECT_NAME} PRIVATE )
+target_link_libraries(${PROJECT_NAME} PRIVATE queue)
 #target_include_directories(${PROJECT_NAME} PUBLIC "${PROJECT_SOURCE_DIR}")

@@ -15,13 +15,17 @@ EventMain::~EventMain() {
 
 void EventMain::mainLoop()
 {
+	nannyLogInfo("Starting MainEvent loop");
 	while(isRunning())
 	{
 		while(isSuspended())
 			;
 		Event *event = EventQueue::getInstance().pop();
-		eventHandler.handleEvent(event);
-		delete event;
+		if(event)
+		{
+			eventHandler.handleEvent(event);
+			delete event;
+		}
 	}
 }
 

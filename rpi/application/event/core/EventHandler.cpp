@@ -20,6 +20,7 @@ EventHandler::~EventHandler() {
 
 void EventHandler::handleEvent(Event *event)
 {
+	nannyLogInfo("Handled new event");
 	//logInfo "handled new Event"
 	executor::EventExecutor *eventExecutor = nullptr;
 
@@ -27,7 +28,7 @@ void EventHandler::handleEvent(Event *event)
 	{
 		case LoggerEvent:
 		{
-
+			nannyLogInfo("Cached LoggerEvent");
 			break;
 		}
 		default:
@@ -36,9 +37,9 @@ void EventHandler::handleEvent(Event *event)
 		}
 	}
 
-	if( eventExecutor->execute(event->payload) != executor::Status_OK )
+	if( eventExecutor && eventExecutor->execute(event->payload) != executor::Status_OK )
 	{
-		//logERROR
+		nannyLogInfo("Cached LoggerEvent");
 	}
 }
 

@@ -5,8 +5,8 @@
  *      Author: njmo
  */
 
-#include <EventQueue.hpp>
-#include <EventHandler.hpp>
+#include <event/queue/EventQueue.hpp>
+#include <event/core/EventHandler.hpp>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 

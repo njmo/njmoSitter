@@ -20,6 +20,7 @@ void EventMain::mainLoop()
 	{
 		while(isSuspended())
 			;
+
 		Event *event = EventQueue::getInstance().pop();
 		if(event)
 		{
@@ -27,6 +28,7 @@ void EventMain::mainLoop()
 			delete event;
 		}
 	}
+	nannyLogInfo("Stopping MainEvent loop");
 }
 
 } /* namespace event */

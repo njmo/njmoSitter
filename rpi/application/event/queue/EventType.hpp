@@ -13,7 +13,8 @@ namespace event {
 
 enum EventType
 {
-	LoggerEvent = 99
+	LoggerEvent = 99,
+	TestEvent = 0
 };
 
 }

@@ -21,14 +21,20 @@ EventHandler::~EventHandler() {
 void EventHandler::handleEvent(Event *event)
 {
 	nannyLogInfo("Handled new event");
-	//logInfo "handled new Event"
 	executor::EventExecutor *eventExecutor = nullptr;
 
 	switch(event->type)
 	{
 		case LoggerEvent:
 		{
-			nannyLogInfo("Cached LoggerEvent");
+			nannyLogInfo("Catched LoggerEvent");
+			event::EventQueue::getInstance().sendResponse(0,(u8*)new u32(8));
+			break;
+		}
+		case TestEvent:
+		{
+			nannyLogInfo("Catched TestEvent");
+			eventExecutor = new executor::TestExecutor();
 			break;
 		}
 		default:
@@ -37,9 +43,14 @@ void EventHandler::handleEvent(Event *event)
 		}
 	}
 
-	if( eventExecutor && eventExecutor->execute(event->payload) != executor::Status_OK )
+	if( eventExecutor  )
 	{
-		nannyLogInfo("Cached LoggerEvent");
+		Response* resp = eventExecutor->execute(event->payload);
+		if(resp->status == Reponse_Ok && resp->type == WithReponse)
+		{
+			 event::EventQueue::getInstance().sendResponse(event->senderId,resp->data);
+			 delete resp;
+		}
 	}
 }
 

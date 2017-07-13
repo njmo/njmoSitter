@@ -8,6 +8,7 @@
 #ifndef APPLICATION_EVENT_EXECUTORS_TESTEXECUTOR_TESTEXECUTOR_HPP_
 #define APPLICATION_EVENT_EXECUTORS_TESTEXECUTOR_TESTEXECUTOR_HPP_
 #include "EventExecutor.hpp"
+#include <event/responses/TestResponse.hpp>
 
 namespace event {
 namespace executor {
@@ -15,7 +16,7 @@ namespace executor {
 class TestExecutor : public EventExecutor {
 public:
 	TestExecutor();
-	ResponseStatus execute(void *);
+	Response* execute(void *);
 	virtual ~TestExecutor();
 };
 

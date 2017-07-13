@@ -9,21 +9,16 @@
 #define APPLICATION_EVENT_EVENTEXECUTOR_HPP_
 #include <inc/defines.hpp>
 #include <utils/Logger/Logger.hpp>
+#include <event/queue/Response.hpp>
 
 namespace event {
 namespace executor {
 
-enum ResponseStatus
-{
-	Status_OK,
-	Status_Error,
-	Status_NotDefined
-};
 
 class EventExecutor {
 public:
 	EventExecutor();
-	virtual ResponseStatus execute(void *);
+	virtual Response* execute(void *) = 0;
 	virtual ~EventExecutor();
 };
 

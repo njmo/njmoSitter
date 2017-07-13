@@ -33,4 +33,19 @@ void EventQueue::pushImportant(Event * event)
 	eventList.push_front(event);
 }
 
+u8 * EventQueue::pushAndWaitForResponse(Event *event)
+{
+	push(event);
+	queue::Waiter waiter;
+	nannyLogInfo("Creating new Waiter");
+	event->senderId = waiterCounter;
+	waitingRoom.registerWaiter(waiterCounter++,waiter);
+	u8 *response =  waiter.waitForResponse();
+	return response;
+}
+void EventQueue::sendResponse(u32 sender,u8* data)
+{
+	waitingRoom.notifyWaiter(sender,data);
+}
+
 } /* namespace event */

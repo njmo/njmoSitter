@@ -12,7 +12,7 @@ add_subdirectory(event)
 
 add_definitions("-std=c++14 -Ofast -fPIC")
 
-add_executable(${PROJECT_NAME} "rpi.cpp")
+add_executable(${PROJECT_NAME} "rpi.cpp" "Nanny.cpp")
 
 #target_link_libraries(${PROJECT_NAME} LINK_PUBLIC event_machine server testLibrary -pthread)
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC queue event_machine testLibrary)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC queue event_machine testLibrary -pthread)

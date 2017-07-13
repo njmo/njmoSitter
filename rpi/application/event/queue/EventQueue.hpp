@@ -8,9 +8,11 @@
 #ifndef APPLICATION_EVENT_EVENTQUEUE_HPP_
 #define APPLICATION_EVENT_EVENTQUEUE_HPP_
 #include <event/queue/Event.hpp>
+#include "WaitingRoom.hpp"
 #include <list>
 #include <thread>
 #include <mutex>
+#include <map>
 
 namespace event {
 
@@ -25,12 +27,21 @@ public:
 	Event* pop();
 	void push(Event *);
 	void pushImportant(Event *);
+	u8 * pushAndWaitForResponse(Event *);
+	void sendResponse(u32,u8*);
 private:
-	EventQueue() {}
+	EventQueue()
+		: waiterCounter(0)
+	{
+
+	}
 	EventQueue(EventQueue const&)      = delete;
     void operator=(EventQueue const&)  = delete;
 
 	std::list<Event *> eventList;
+	queue::WaitingRoom waitingRoom;
+	u32 waiterCounter;
+
 	std::mutex mutex;
 };
 

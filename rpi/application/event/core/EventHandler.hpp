@@ -8,7 +8,8 @@
 #ifndef APPLICATION_EVENT_EVENTHANDLER_HPP_
 #define APPLICATION_EVENT_EVENTHANDLER_HPP_
 #include <event/queue/Event.hpp>
-#include <event/executors/EventExecutor.hpp>
+#include <event/executors/TestExecutor.hpp>
+#include <event/queue/EventQueue.hpp>
 
 #include <iostream>
 namespace event {

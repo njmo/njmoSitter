@@ -18,9 +18,12 @@ public:
 	TimeoutGenerator(u32 duration);
 	void generateTimeouts();
 	virtual ~TimeoutGenerator();
+	void suspend();
+	void wakeUp();
+	void kill();
 private:
-	bool suspended;
-	bool stopped;
+	volatile bool suspended;
+	volatile bool stopped;
 	u32 timeoutDuration;
 };
 

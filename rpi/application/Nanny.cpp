@@ -17,14 +17,17 @@ Nanny::Nanny()
 
 Nanny::~Nanny() {
 	eventMain.kill();
+	timeoutGenerator.kill();
 	eventMain.join();
-	nannyLogInfo("eventMain killed");
+	timeoutGenerator.join();
+	nannyLogInfo("eventMain and  timeoutGenerator killed");
 }
 
 void Nanny::create()
 {
 	nannyLogInfo("Waking up eventMain");
 	eventMain.wakeUp();
+	timeoutGenerator.wakeUp();
 
 	event::Event *tempEvent = new event::Event;
 	tempEvent->type=static_cast<event::EventType>(99);

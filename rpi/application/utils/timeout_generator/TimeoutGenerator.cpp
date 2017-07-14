@@ -23,6 +23,8 @@ void TimeoutGenerator::generateTimeouts()
 	u32 b = 2;
 	while(!stopped)
 	{
+		while(suspended)
+			;
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeoutDuration));
 		event::Event *timeoutEvent = new event::Event;
 		timeoutEvent->type = event::TimeoutEvent;
@@ -33,8 +35,19 @@ void TimeoutGenerator::generateTimeouts()
 		event::EventQueue::getInstance().push(timeoutEvent);
 	}
 }
-
+void TimeoutGenerator::suspend()
+{
+	suspended = true;
+}
+void TimeoutGenerator::wakeUp()
+{
+	suspended = false;
+}
+void TimeoutGenerator::kill()
+{
+	stopped = true;
+}
 TimeoutGenerator::~TimeoutGenerator() {
-	// TODO Auto-generated destructor stub
+	nannyLogInfo("timeoutGenerator killed");
 }
 

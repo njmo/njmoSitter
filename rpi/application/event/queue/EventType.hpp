@@ -14,6 +14,7 @@ namespace event {
 enum EventType
 {
 	LoggerEvent = 99,
+	TimeoutEvent = 9999,
 	TestEvent = 0
 };
 

@@ -37,13 +37,19 @@ void EventHandler::handleEvent(Event *event)
 			eventExecutor = new executor::TestExecutor();
 			break;
 		}
+		case TimeoutEvent:
+		{
+			nannyLogInfo("Catched TimeoutEvent");
+			eventExecutor = new executor::TimeoutExecutor();
+			break;
+		}
 		default:
 		{
 			break;
 		}
 	}
 
-	if( eventExecutor  )
+	if( eventExecutor )
 	{
 		Response* resp = eventExecutor->execute(event->payload);
 		if(resp->status == Reponse_Ok && resp->type == WithReponse)
@@ -51,6 +57,7 @@ void EventHandler::handleEvent(Event *event)
 			 event::EventQueue::getInstance().sendResponse(event->senderId,resp->data);
 			 delete resp;
 		}
+		delete eventExecutor;
 	}
 }
 

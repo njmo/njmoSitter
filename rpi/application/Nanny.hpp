@@ -11,6 +11,7 @@
 #include <event/core/EventMain.hpp>
 #include <event/queue/EventQueue.hpp>
 #include <event/responses/TestResponse.hpp>
+#include <utils/timeout_generator/TimeoutGenerator.hpp>
 
 #include <thread>
 #include <iostream>
@@ -24,6 +25,7 @@ public:
 	virtual ~Nanny();
 private:
 	event::EventMain eventMain;
+	TimeoutGenerator timeoutGenerator;
 };
 
 } /* namespace app */

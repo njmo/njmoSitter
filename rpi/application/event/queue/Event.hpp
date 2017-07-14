@@ -17,7 +17,7 @@ struct Event
 {
 	EventType type;
 	u32 senderId;
-	u8 payload[1];
+	u8* payload;
 };
 
 }

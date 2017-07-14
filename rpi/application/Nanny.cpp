@@ -9,7 +9,9 @@
 
 namespace app {
 
-Nanny::Nanny() {
+Nanny::Nanny()
+	: timeoutGenerator(500)
+{
 	nannyLogInfo("Nanny created");
 }
 

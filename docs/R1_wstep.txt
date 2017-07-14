@@ -1,0 +1,9 @@
+Wstep:
+Opowiedziec o:
+- problemach rodzicow i koniecznosci wspomagania opieki,
+- limitach dostepnych rozwiazan i ich cenie,
+- potrzebie modularnosci urzadzen, dopasowania takiej opcji jaka jest nam potrzebna
+- rozwijajacym sie IoT i smart home i wejscia 5G,
+- mozliwosci integracji systemu jako podczesci wiekszego ( API ),
+- wymagania co do sprzetu spelniajacego zadanie,
+- jaki jest cel tej pracy

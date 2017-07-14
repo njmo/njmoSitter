@@ -1,0 +1,4 @@
+- cmake do budowania
+- alsa c++ do sterowania audio i capture
+- do kamery open cv
+- do raspberry bede uzywal tego gowna co grziec

@@ -1,0 +1,16 @@
+/*
+ * MusicPlayerResponse.hpp
+ *
+ *  Created on: Jul 17, 2017
+ *      Author: njmo
+ */
+
+#ifndef APPLICATION_EVENT_RESPONSES_MUSICPLAYERRESPONSE_HPP_
+#define APPLICATION_EVENT_RESPONSES_MUSICPLAYERRESPONSE_HPP_
+
+struct MusicPlayerResponse
+{
+
+};
+
+#endif /* APPLICATION_EVENT_RESPONSES_MUSICPLAYERRESPONSE_HPP_ */

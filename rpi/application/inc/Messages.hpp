@@ -9,16 +9,13 @@
 #define MESSAGES_HPP_
 
 #include "defines.hpp"
+#include "event/queue/Event.hpp"
 
-namespace server
+
+template<typename T>
+void *allocate()
 {
-
-struct Message
-{
-	msgID id;
-}__attribute__((__packed__));
-
-}// namespace server
-
-
+	u32 size = sizeof(T) + ( 2*sizeof(u32));
+	return (void*)new u8[size];
+}
 #endif /* MESSAGES_HPP_ */

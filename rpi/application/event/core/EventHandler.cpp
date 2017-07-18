@@ -34,13 +34,19 @@ void EventHandler::handleEvent(Event *event)
 		case TestEvent:
 		{
 			nannyLogInfo("Catched TestEvent");
-			eventExecutor = new executor::TestExecutor();
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&testExecutor);
 			break;
 		}
 		case TimeoutEvent:
 		{
 			nannyLogInfo("Catched TimeoutEvent");
-			eventExecutor = new executor::TimeoutExecutor();
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&timeoutExecutor);
+			break;
+		}
+		case MusicPlayerEvent:
+		{
+			nannyLogInfo("Catched TimeoutEvent");
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);
 			break;
 		}
 		default:
@@ -55,9 +61,7 @@ void EventHandler::handleEvent(Event *event)
 		if(resp->status == Reponse_Ok && resp->type == WithReponse)
 		{
 			 event::EventQueue::getInstance().sendResponse(event->senderId,resp->data);
-			 delete resp;
 		}
-		delete eventExecutor;
 	}
 }
 

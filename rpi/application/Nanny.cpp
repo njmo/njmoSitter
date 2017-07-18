@@ -29,18 +29,11 @@ void Nanny::create()
 	eventMain.wakeUp();
 	timeoutGenerator.wakeUp();
 
-	event::Event *tempEvent = new event::Event;
-	tempEvent->type=static_cast<event::EventType>(99);
-	u8 * value = event::EventQueue::getInstance().pushAndWaitForResponse(tempEvent);
-	std::cout << (u32) *value;
-	nannyLogInfo("Code goe further");
-
 	event::Event *testEvent = new event::Event;
 	testEvent->type=static_cast<event::EventType>(0);
-	u8 * response = event::EventQueue::getInstance().pushAndWaitForResponse(testEvent);
-	TestResponse *resp = reinterpret_cast<TestResponse *>(response);
+	TestResponse *resp = reinterpret_cast<TestResponse *>(event::EventQueue::getInstance().pushAndWaitForResponse(testEvent));
 	std::cout << "A: " << resp->a << " b: " << resp->b << std::endl;
-	delete resp;
+	delete[] (((u32*)resp)-2);
 }
 
 } /* namespace app */

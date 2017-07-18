@@ -9,6 +9,7 @@
 #define APPLICATION_EVENT_EXECUTORS_TESTEXECUTOR_TESTEXECUTOR_HPP_
 #include "EventExecutor.hpp"
 #include <event/responses/TestResponse.hpp>
+#include <inc/Messages.hpp>
 
 namespace event {
 namespace executor {

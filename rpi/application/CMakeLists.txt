@@ -4,10 +4,11 @@ project(nannyplication)
 set(CMAKE_STANDARD_LIBRARIES ${CMAKE_STANDARD_LIBRARIES} utils pthread queue)
 
 include_directories("${PROJECT_SOURCE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/interface")
 
 add_subdirectory(utils)
-#add_subdirectory(server)
 add_subdirectory(testLibrary)
+add_subdirectory(device)
 add_subdirectory(event)
 
 add_definitions("-std=c++14 -Ofast -fPIC")

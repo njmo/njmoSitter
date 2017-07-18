@@ -22,7 +22,7 @@ struct Response
 {
 	ResponseStatus status;
 	ReponseType type;
-	u8* data;
+	u8 data[1];
 };
 
 #endif /* APPLICATION_EVENT_QUEUE_RESPONSE_HPP_ */

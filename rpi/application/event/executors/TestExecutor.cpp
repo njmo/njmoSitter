@@ -22,13 +22,13 @@ TestExecutor::~TestExecutor() {
 Response* TestExecutor::execute(void *)
 {
 	nannyLogInfo("Creating response");
-	Response* resp = new Response();
+	void *msg = allocate<TestResponse>();
+	Response* resp = reinterpret_cast<Response *>(msg);
 	resp->status = Reponse_Ok;
 	resp->type = WithReponse;
-	TestResponse *tr = new TestResponse;
+	TestResponse *tr = reinterpret_cast<TestResponse *>(resp->data);
 	tr->a = 2;
 	tr->b = 5;
-	resp->data = reinterpret_cast<u8 *>(tr);
 	return resp;
 }
 

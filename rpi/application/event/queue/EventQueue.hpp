@@ -27,8 +27,8 @@ public:
 	Event* pop();
 	void push(Event *);
 	void pushImportant(Event *);
-	u8 * pushAndWaitForResponse(Event *);
-	void sendResponse(u32,u8*);
+	void * pushAndWaitForResponse(Event *);
+	void sendResponse(u32,void*);
 private:
 	EventQueue()
 		: waiterCounter(0)

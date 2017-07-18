@@ -10,6 +10,7 @@
 #include <inc/defines.hpp>
 #include <utils/Logger/Logger.hpp>
 #include <event/queue/Response.hpp>
+#include "EventExecutor.hpp"
 
 #include <event/event_data/MusicPlayerData.hpp>
 #include <device/MusicPlayer.hpp>
@@ -17,7 +18,7 @@
 namespace event {
 namespace executor {
 
-class MusicPlayerExecutor {
+class MusicPlayerExecutor : public EventExecutor {
 public:
 	MusicPlayerExecutor();
 	Response* execute(void *);

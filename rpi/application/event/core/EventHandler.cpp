@@ -28,7 +28,6 @@ void EventHandler::handleEvent(Event *event)
 		case LoggerEvent:
 		{
 			nannyLogInfo("Catched LoggerEvent");
-			event::EventQueue::getInstance().sendResponse(0,(u8*)new u32(8));
 			break;
 		}
 		case TestEvent:
@@ -45,7 +44,7 @@ void EventHandler::handleEvent(Event *event)
 		}
 		case MusicPlayerEvent:
 		{
-			nannyLogInfo("Catched TimeoutEvent");
+			nannyLogInfo("Catched MusicPlayerEvent");
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);
 			break;
 		}

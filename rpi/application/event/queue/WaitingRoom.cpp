@@ -25,7 +25,7 @@ void WaitingRoom::registerWaiter(u32 sender,Waiter &_waiter)
 	waiters.insert(std::pair<u32,Waiter*>(sender,&_waiter));
 }
 
-void WaitingRoom::notifyWaiter(u32 sender,u8* data)
+void WaitingRoom::notifyWaiter(u32 sender,void* data)
 {
 	std::lock_guard<std::mutex> lock(mutex);
 	auto waiter = waiters.find(sender);

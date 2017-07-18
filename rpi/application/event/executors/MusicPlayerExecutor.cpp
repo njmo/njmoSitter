@@ -27,12 +27,16 @@ Response* MusicPlayerExecutor::execute(void *_data)
 	switch(data->type)
 	{
 		case stopMusic:
-			musicPlayer.stop();
+			nannyLogInfo("stoping Music");
+			//musicPlayer.stop();
 			break;
 		default:
 			break;
 	}
-	return nullptr;
+	Response * response =  new Response;
+	response->status = Reponse_Ok;
+	response->type = WithoutResponse;
+	return response;
 }
 
 } /* namespace executor */

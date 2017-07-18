@@ -25,7 +25,7 @@ void EventMain::mainLoop()
 		if(event)
 		{
 			eventHandler.handleEvent(event);
-			delete event;
+			delete[] (u8*)event;
 		}
 	}
 	nannyLogInfo("Stopping MainEvent loop");

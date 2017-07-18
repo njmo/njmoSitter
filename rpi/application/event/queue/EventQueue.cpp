@@ -33,17 +33,17 @@ void EventQueue::pushImportant(Event * event)
 	eventList.push_front(event);
 }
 
-u8 * EventQueue::pushAndWaitForResponse(Event *event)
+void * EventQueue::pushAndWaitForResponse(Event *event)
 {
 	push(event);
 	queue::Waiter waiter;
-	nannyLogInfo("Creating new Waiter");
+	nannyLogInfo("Creating new Waiter id " + std::to_string(waiterCounter));
 	event->senderId = waiterCounter;
 	waitingRoom.registerWaiter(waiterCounter++,waiter);
-	u8 *response =  waiter.waitForResponse();
+	void *response =  waiter.waitForResponse();
 	return response;
 }
-void EventQueue::sendResponse(u32 sender,u8* data)
+void EventQueue::sendResponse(u32 sender,void* data)
 {
 	waitingRoom.notifyWaiter(sender,data);
 }

@@ -6,6 +6,7 @@
  */
 
 #include "TimeoutGenerator.hpp"
+#include <inc/Messages.hpp>
 
 TimeoutGenerator::TimeoutGenerator(u32 duration)
 	: std::thread(&TimeoutGenerator::generateTimeouts, this),
@@ -26,12 +27,13 @@ void TimeoutGenerator::generateTimeouts()
 		while(suspended)
 			;
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeoutDuration));
-		event::Event *timeoutEvent = new event::Event;
+
+		event::Event *timeoutEvent = reinterpret_cast<event::Event*>(allocate<TimeoutData>());
 		timeoutEvent->type = event::TimeoutEvent;
-		TimeoutData *data = new TimeoutData;
-		data->a = a++;
-		data->b = b++;
-		timeoutEvent->payload = reinterpret_cast<u8 *>(data);
+		TimeoutData &tmData = reinterpret_cast<TimeoutData&>(timeoutEvent->payload);
+		tmData.a = a++;
+		tmData.b = b++;
+
 		event::EventQueue::getInstance().push(timeoutEvent);
 	}
 }

@@ -20,14 +20,14 @@ public:
 	{
 		nannyLogInfo("Waiter is born");
 	}
-	u8* waitForResponse()
+	void* waitForResponse()
 	{
 		while( waiting )
 			;
 		nannyLogInfo("Waiter retrieve response data, returning value to code");
 		return data;
 	}
-	void notify(u8 *_data)
+	void notify(void *_data)
 	{
 		nannyLogInfo("Waiter is being notified");
 		data = _data;
@@ -39,7 +39,7 @@ public:
 	}
 private:
 	volatile bool waiting;
-	u8 *data;
+	void *data;
 };
 
 } /* namespace queue */

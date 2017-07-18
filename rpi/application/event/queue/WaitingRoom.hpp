@@ -19,7 +19,7 @@ class WaitingRoom {
 public:
 	WaitingRoom();
 	void registerWaiter(u32,Waiter &);
-	void notifyWaiter(u32,u8*);
+	void notifyWaiter(u32,void*);
 	virtual ~WaitingRoom();
 private:
 	std::map<u32,Waiter*> waiters;

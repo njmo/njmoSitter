@@ -30,6 +30,7 @@ void Nanny::create()
 	nannyLogInfo("Waking up eventMain");
 	eventMain.wakeUp();
 	timeoutGenerator.wakeUp();
+	interfaceFinder.init("enp0s8");
 
 	event::Event *musicPlayerEvent = reinterpret_cast<event::Event*>(allocate<MusicPlayerData>());
 	musicPlayerEvent->type = static_cast<event::EventType>(9998);

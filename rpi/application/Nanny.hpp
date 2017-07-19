@@ -13,6 +13,8 @@
 #include <event/responses/TestResponse.hpp>
 #include <utils/timeout_generator/TimeoutGenerator.hpp>
 
+#include "utils/InterfaceFinder.hpp"
+
 #include <thread>
 #include <iostream>
 
@@ -26,6 +28,7 @@ public:
 private:
 	event::EventMain eventMain;
 	TimeoutGenerator timeoutGenerator;
+	InterfaceFinder interfaceFinder;
 };
 
 } /* namespace app */

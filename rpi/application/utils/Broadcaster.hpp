@@ -15,6 +15,12 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+struct NannyBroadcasMessage
+{
+	i8 addr[INET_ADDRSTRLEN];
+	i32 port;
+};
+
 class Broadcaster {
 public:
 	Broadcaster(InterfaceFinder&);

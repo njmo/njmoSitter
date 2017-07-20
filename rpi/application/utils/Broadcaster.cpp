@@ -15,34 +15,31 @@ Broadcaster::Broadcaster(InterfaceFinder &_finder)
 
 void Broadcaster::broadcastNannyAddress()
 {
-	int sock, status, buflen, sinlen;
 	  char buffer[1024];
+	  int status, yes=1;
 	  struct sockaddr_in sock_in;
-	  int yes = 1;
 
-	  sinlen = sizeof(struct sockaddr_in);
-	  memset(&sock_in, 0, sinlen);
-	  buflen = 1024;
+	  NannyBroadcasMessage *msg = reinterpret_cast<NannyBroadcasMessage *>(buffer);
+	  memcpy(msg->addr,interfaceFinder.getAddrString().c_str(),interfaceFinder.getAddrString().size());
+	  msg->port = 1234;
 
-	  sock = socket (PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	  memset(&sock_in, 0, sizeof(struct sockaddr_in));
 
-	  status = setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int) );
-	  printf("Setsockopt Status = %d\n", status);
+	  if( setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int)) != 0)
+		  nannyLogError("Failed setting broadcast option on socket");
 
-	  struct sockaddr_in &a = interfaceFinder.getBroadcastAddr(); 
-	  memcpy(&sock_in,&a,sizeof(struct sockaddr_in));
+	  sock_in.sin_addr = interfaceFinder.getBroadcastAddr().sin_addr;
 	  sock_in.sin_port = htons(12345); /* port number */
 	  sock_in.sin_family = PF_INET;
 
-	  sprintf(buffer, "Ciao");
-	  buflen = strlen(buffer);
-	  status = sendto(sock, buffer, buflen, 0, (struct sockaddr *)&sock_in, sinlen);
-	  printf("sendto Status = %d\n", status);
-
-	  close(sock);
+	  const i32 messageLength = sizeof(NannyBroadcasMessage);
+	  if( sendto(sock, buffer, messageLength, 0, (struct sockaddr *)&sock_in, sizeof(struct sockaddr_in)) < messageLength)
+		  nannyLogError("Failed when sending broadcast data");
+	  else
+		  nannyLogInfo("Broadcast to address " + interfaceFinder.getBroadcastAddrString() + " send successfully");
 }
 
 Broadcaster::~Broadcaster() {
-	// TODO Auto-generated destructor stub
+	  close(sock);
 }
 

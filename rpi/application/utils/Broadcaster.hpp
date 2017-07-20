@@ -17,14 +17,13 @@
 
 class Broadcaster {
 public:
-	//Broadcaster(const InterfaceFinder&);
-	Broadcaster(){}
+	Broadcaster(InterfaceFinder&);
 
 	void broadcastNannyAddress();
 
 	virtual ~Broadcaster();
 private:
-	//const InterfaceFinder& interfaceFinder;
+	InterfaceFinder& interfaceFinder;
 };
 
 #endif /* APPLICATION_UTILS_BROADCASTER_HPP_ */

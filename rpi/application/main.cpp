@@ -9,7 +9,9 @@ int main(int argc, char *argv[])
 	//app::Nanny nanny;
 	//nanny.create();
 	//std::getchar();
-	Broadcaster b;
+	InterfaceFinder finder;
+	finder.init("wlan0");
+	Broadcaster b(finder);
 	b.broadcastNannyAddress();
 
 }

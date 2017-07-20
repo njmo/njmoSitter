@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(nannyplication)
 
+add_definitions("-std=c++14 -Ofast -fPIC")
 set(CMAKE_STANDARD_LIBRARIES ${CMAKE_STANDARD_LIBRARIES} utils pthread queue)
 
 include_directories("${PROJECT_SOURCE_DIR}")
@@ -11,7 +12,6 @@ add_subdirectory(testLibrary)
 add_subdirectory(device)
 add_subdirectory(event)
 
-add_definitions("-std=c++14 -Ofast -fPIC")
 
 add_executable(${PROJECT_NAME} "main.cpp" "Nanny.cpp")
 

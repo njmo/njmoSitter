@@ -6,14 +6,14 @@
  */
 
 #include "Broadcaster.hpp"
-/*
-Broadcaster::Broadcaster(const InterfaceFinder &_finder)
+
+Broadcaster::Broadcaster(InterfaceFinder &_finder)
 	: interfaceFinder(_finder)
 {
 	// TODO Auto-generated constructor stub
 
 }
-*/
+
 void Broadcaster::broadcastNannyAddress()
 {
 	int sock, status, buflen, sinlen;
@@ -42,7 +42,8 @@ void Broadcaster::broadcastNannyAddress()
 	     you can comput the local broadcat using NIC address and its NETMASK
 	  */
 
-	  sock_in.sin_addr.s_addr=htonl(-1); /* send message to 255.255.255.255 */
+	  struct sockaddr_in &a = interfaceFinder.getBroadcastAddr(); 
+	  memcpy(&sock_in,&a,sizeof(struct sockaddr_in));
 	  sock_in.sin_port = htons(12345); /* port number */
 	  sock_in.sin_family = PF_INET;
 

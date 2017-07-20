@@ -23,6 +23,7 @@ public:
 
 	virtual ~Broadcaster();
 private:
+	int sock;
 	InterfaceFinder& interfaceFinder;
 };
 

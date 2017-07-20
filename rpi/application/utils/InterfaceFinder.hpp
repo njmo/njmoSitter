@@ -24,9 +24,13 @@ public:
 	virtual ~InterfaceFinder();
 	bool init(std::string);
 
-	std::string getAddr();
-	std::string getNetmaskAddr();
-	std::string getBroadcastAddr();
+	struct sockaddr_in& getAddrStr();
+	struct sockaddr_in& getNetmaskAddr();
+	struct sockaddr_in& getBroadcastAddr();
+
+	std::string getAddrString();
+	std::string getNetmaskAddrString();
+	std::string getBroadcastAddrString();
 private:
 
 	bool storeAddr(int,struct ifreq&);

@@ -92,7 +92,7 @@ bool InterfaceFinder::storeBroadcastAddr(int sock,struct ifreq& _ir)
 	return result;
 }
 
-std::string InterfaceFinder::getAddr()
+std::string InterfaceFinder::getAddrString()
 {
     char address[INET_ADDRSTRLEN];
 	if (inet_ntop(AF_INET, &addr.sin_addr, address, sizeof(address)) != NULL)
@@ -102,7 +102,7 @@ std::string InterfaceFinder::getAddr()
 	nannyLogError("Error parsing addr sin_addr to string");
 	return "error";
 }
-std::string InterfaceFinder::getNetmaskAddr()
+std::string InterfaceFinder::getNetmaskAddrString()
 {
     char address[INET_ADDRSTRLEN];
 	if (inet_ntop(AF_INET, &netmaskAddr.sin_addr, address, sizeof(address)) != NULL)
@@ -113,7 +113,7 @@ std::string InterfaceFinder::getNetmaskAddr()
 	return "error";
 
 }
-std::string InterfaceFinder::getBroadcastAddr()
+std::string InterfaceFinder::getBroadcastAddrString()
 {
     char address[INET_ADDRSTRLEN];
 	if (inet_ntop(AF_INET, &broadcastAddr.sin_addr, address, sizeof(address)) != NULL)
@@ -122,5 +122,17 @@ std::string InterfaceFinder::getBroadcastAddr()
 	}
 	nannyLogError("Error parsing broadcast sin_addr to string");
 	return "error";
+}
 
+struct sockaddr_in& InterfaceFinder::getAddrStr()
+{
+	return addr;
+}
+struct sockaddr_in& InterfaceFinder::getNetmaskAddr()
+{
+	return netmaskAddr;
+}
+struct sockaddr_in& InterfaceFinder::getBroadcastAddr()
+{
+	return broadcastAddr;
 }

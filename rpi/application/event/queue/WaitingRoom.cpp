@@ -18,11 +18,11 @@ WaitingRoom::~WaitingRoom() {
 	// TODO Auto-generated destructor stub
 }
 
-void WaitingRoom::registerWaiter(u32 sender,Waiter &_waiter)
+void WaitingRoom::registerWaiter(u32 sender,IWaiter *_waiter)
 {
 	std::lock_guard<std::mutex> lock(mutex);
 	nannyLogInfo("Registering waiter in WaitingRoom");
-	waiters.insert(std::pair<u32,Waiter*>(sender,&_waiter));
+	waiters.insert(std::pair<u32,IWaiter*>(sender,_waiter));
 }
 
 void WaitingRoom::notifyWaiter(u32 sender,void* data)

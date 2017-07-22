@@ -28,6 +28,7 @@ public:
 	void push(Event *);
 	void pushImportant(Event *);
 	void * pushAndWaitForResponse(Event *);
+	void notifyOnResponse(Event *,queue::IWaiter &);
 	void sendResponse(u32,void*);
 private:
 	EventQueue()

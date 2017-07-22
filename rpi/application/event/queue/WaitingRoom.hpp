@@ -18,11 +18,11 @@ namespace queue {
 class WaitingRoom {
 public:
 	WaitingRoom();
-	void registerWaiter(u32,Waiter &);
+	void registerWaiter(u32,IWaiter *);
 	void notifyWaiter(u32,void*);
 	virtual ~WaitingRoom();
 private:
-	std::map<u32,Waiter*> waiters;
+	std::map<u32,IWaiter*> waiters;
 	std::mutex mutex;
 };
 

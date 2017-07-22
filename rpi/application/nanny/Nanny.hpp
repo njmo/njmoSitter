@@ -13,17 +13,20 @@
 
 #include "utils/InterfaceFinder.hpp"
 #include <inc/Messages.hpp>
+#include <event/queue/Waiter.hpp>
 
 #include <thread>
 #include <iostream>
 
 namespace app {
 
-class Nanny {
+class Nanny : queue::IWaiter{
 public:
 	Nanny();
 	void create();
 	void handleTimeout();
+	void sendEvent();
+	void notify(void *);
 	virtual ~Nanny();
 private:
 	InterfaceFinder interfaceFinder;

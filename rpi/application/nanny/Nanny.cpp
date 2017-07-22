@@ -24,6 +24,22 @@ void Nanny::create()
 {
 	interfaceFinder.init("enp0s8");
 }
+void Nanny::sendEvent()
+{
+	nannyLogInfo("Nanny is registering for status");
+	event::Event *nanny = reinterpret_cast<event::Event*>(allocate<TestData>());
+	nanny->type = static_cast<event::EventType>(event::TestEvent);
+	nanny->senderId=999;
+
+	nannyLogInfo("Nanny is goint to register");
+	event::EventQueue::getInstance().notifyOnResponse(nanny,*this);
+	nannyLogInfo("Nanny is registered");
+}
+void Nanny::notify(void * ev)
+{
+	nannyLogInfo("Nanny is notified");
+	freed(ev);
+}
 void Nanny::handleTimeout()
 {
 	event::Event *musicPlayerEvent = reinterpret_cast<event::Event*>(allocate<MusicPlayerData>());

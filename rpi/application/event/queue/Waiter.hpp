@@ -12,7 +12,13 @@
 
 namespace queue {
 
-class Waiter {
+struct IWaiter
+{
+	virtual void notify(void *) = 0;
+	virtual ~IWaiter(){}
+};
+
+class Waiter : IWaiter{
 public:
 	Waiter()
 		: waiting(true),

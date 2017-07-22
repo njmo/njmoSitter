@@ -16,6 +16,7 @@ enum EventType
 	LoggerEvent = 99,
 	MusicPlayerEvent = 9998,
 	TimeoutEvent = 9999,
+	DisableQueueEvent,
 	TestEvent = 0
 };
 

@@ -9,7 +9,9 @@
 
 namespace event {
 
-EventHandler::EventHandler() {
+EventHandler::EventHandler(app::Nanny &_n)
+	:	nanny(_n)
+{
 	// TODO Auto-generated constructor stub
 
 }
@@ -39,7 +41,6 @@ void EventHandler::handleEvent(Event *event)
 		case TimeoutEvent:
 		{
 			nannyLogInfo("Catched TimeoutEvent");
-			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&timeoutExecutor);
 			break;
 		}
 		case MusicPlayerEvent:
@@ -60,6 +61,10 @@ void EventHandler::handleEvent(Event *event)
 		if(resp->status == Reponse_Ok && resp->type == WithReponse)
 		{
 			 event::EventQueue::getInstance().sendResponse(event->senderId,resp->data);
+		}
+		else
+		{
+			delete resp;
 		}
 	}
 }

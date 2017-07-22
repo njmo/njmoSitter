@@ -13,21 +13,21 @@
 #include <event/queue/EventQueue.hpp>
 
 #include <event/executors/TestExecutor.hpp>
-#include <event/executors/TimeoutExecutor.hpp>
 #include <event/executors/MusicPlayerExecutor.hpp>
+#include <nanny/Nanny.hpp>
 
 namespace event {
 
 class EventHandler {
 public:
-	EventHandler();
+	EventHandler(app::Nanny&);
 	void handleEvent(Event *);
 	virtual ~EventHandler();
 private:
 	//message executors
 	executor::TestExecutor testExecutor;
-	executor::TimeoutExecutor timeoutExecutor;
 	executor::MusicPlayerExecutor musicPlayerExecutor;
+	app::Nanny &nanny;
 };
 
 } /* namespace event */

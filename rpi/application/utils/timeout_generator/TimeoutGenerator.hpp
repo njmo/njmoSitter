@@ -10,12 +10,13 @@
 #include <inc/defines.hpp>
 #include <event/queue/EventQueue.hpp>
 #include <event/event_data/TimeoutData.hpp>
+#include <nanny/Nanny.hpp>
 #include <thread>
 #include <chrono>
 
 class TimeoutGenerator : public std::thread{
 public:
-	TimeoutGenerator(u32 duration);
+	TimeoutGenerator(u32 duration,app::Nanny&);
 	void generateTimeouts();
 	virtual ~TimeoutGenerator();
 	void suspend();
@@ -25,6 +26,7 @@ private:
 	volatile bool suspended;
 	volatile bool stopped;
 	u32 timeoutDuration;
+	app::Nanny &nanny;
 };
 
 #endif /* APPLICATION_UTILS_TIMEOUT_GENERATOR_TIMEOUTGENERATOR_HPP_ */

@@ -8,8 +8,9 @@
 #include "TimeoutGenerator.hpp"
 #include <inc/Messages.hpp>
 
-TimeoutGenerator::TimeoutGenerator(u32 duration)
+TimeoutGenerator::TimeoutGenerator(u32 duration,app::Nanny &_n)
 	: std::thread(&TimeoutGenerator::generateTimeouts, this),
+	  nanny(_n),
 	  suspended(true),
 	  stopped(false),
 	  timeoutDuration(duration)
@@ -20,21 +21,22 @@ TimeoutGenerator::TimeoutGenerator(u32 duration)
 
 void TimeoutGenerator::generateTimeouts()
 {
-	u32 a = 0;
-	u32 b = 2;
+	int i=0;
 	while(!stopped)
 	{
 		while(suspended)
 			;
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeoutDuration));
 
-		event::Event *timeoutEvent = reinterpret_cast<event::Event*>(allocate<TimeoutData>());
+		/*event::Event *timeoutEvent = reinterpret_cast<event::Event*>(allocate<TimeoutData>());
 		timeoutEvent->type = event::TimeoutEvent;
 		TimeoutData &tmData = reinterpret_cast<TimeoutData&>(timeoutEvent->payload);
 		tmData.a = a++;
-		tmData.b = b++;
-
-		event::EventQueue::getInstance().push(timeoutEvent);
+		tmData.b = b++;*/
+		i++;
+		if(i > 10)
+			break;
+		nanny.handleTimeout();
 	}
 }
 void TimeoutGenerator::suspend()

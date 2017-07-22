@@ -19,8 +19,8 @@ InterfaceFinder::~InterfaceFinder() {
 bool InterfaceFinder::init(std::string interface)
 {
 		int sock;
+		bool result=true;
 	    struct ifreq ifr;
-	    struct sockaddr_in *ipaddr;
 	    char address[INET_ADDRSTRLEN];
 	    size_t ifnamelen;
 		DIR *d;
@@ -36,7 +36,9 @@ bool InterfaceFinder::init(std::string interface)
 		{
 			std::string s(de->d_name);
 			if(s != interface)
+			{
 				continue;
+			}
 
 			isInterfaceFound = true;
 
@@ -49,20 +51,26 @@ bool InterfaceFinder::init(std::string interface)
 			if (sock < 0)
 			{
 				nannyLogError("Error during opening socket");
-				return false;
+				result = false;
+				break;
 			}
 
 			if( !storeAddr(sock,ifr) || !storeNetmask(sock,ifr) || !storeBroadcastAddr(sock,ifr))
-				return false;
+			{
+				result = false;
+				break;
+			}
 
 			close(sock);
 		}
+
+		free(d);
 		if(!isInterfaceFound)
 		{
 			nannyLogError("interface not found " + interface);
 			return false;
 		}
-		return true;
+		return result;
 	}
 
 bool InterfaceFinder::storeAddr(int sock,struct ifreq& _ir)

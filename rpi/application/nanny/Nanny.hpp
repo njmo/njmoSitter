@@ -8,12 +8,11 @@
 #ifndef APPLICATION_NANNY_HPP_
 #define APPLICATION_NANNY_HPP_
 
-#include <event/core/EventMain.hpp>
 #include <event/queue/EventQueue.hpp>
 #include <event/responses/TestResponse.hpp>
-#include <utils/timeout_generator/TimeoutGenerator.hpp>
 
 #include "utils/InterfaceFinder.hpp"
+#include <inc/Messages.hpp>
 
 #include <thread>
 #include <iostream>
@@ -24,10 +23,9 @@ class Nanny {
 public:
 	Nanny();
 	void create();
+	void handleTimeout();
 	virtual ~Nanny();
 private:
-	event::EventMain eventMain;
-	TimeoutGenerator timeoutGenerator;
 	InterfaceFinder interfaceFinder;
 };
 

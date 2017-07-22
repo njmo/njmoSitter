@@ -35,11 +35,11 @@ void EventQueue::pushImportant(Event * event)
 
 void * EventQueue::pushAndWaitForResponse(Event *event)
 {
-	push(event);
-	queue::Waiter waiter;
 	nannyLogInfo("Creating new Waiter id " + std::to_string(waiterCounter));
+	queue::Waiter waiter;
 	event->senderId = waiterCounter;
 	waitingRoom.registerWaiter(waiterCounter++,waiter);
+	push(event);
 	void *response =  waiter.waitForResponse();
 	return response;
 }

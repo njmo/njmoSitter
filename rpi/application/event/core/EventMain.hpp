@@ -9,15 +9,16 @@
 #define APPLICATION_EVENT_EVENTMAIN_HPP_
 #include "EventHandler.hpp"
 #include <event/queue/EventQueue.hpp>
+#include <nanny/Nanny.hpp>
 #include <thread>
 
 namespace event {
 
 class EventMain : public std::thread {
 public:
-	EventMain()
+	EventMain(app::Nanny& n)
 		:std::thread(&EventMain::mainLoop, this),
-		 eventHandler(),
+		 eventHandler(n),
 		 suspended(true),
 		 stopped(false)
 	{
@@ -27,7 +28,7 @@ public:
 	void mainLoop();
 	bool isSuspended() { return suspended; }
 	void suspend() { suspended = true; nannyLogInfo("Going to sleep"); }
-	void kill(){ stopped = true; nannyLogInfo("received kill command");}
+	void kill(){ stopped = true; nannyLogInfo("received kill command"); }
 	void wakeUp() { suspended = false; }
 	bool isRunning() { return !stopped; }
 	virtual ~EventMain();

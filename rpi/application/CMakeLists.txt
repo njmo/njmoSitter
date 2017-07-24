@@ -13,8 +13,9 @@ add_subdirectory(testLibrary)
 add_subdirectory(nanny)
 add_subdirectory(device)
 add_subdirectory(event)
+add_subdirectory(server)
 
 
 add_executable(${PROJECT_NAME} "main.cpp")
 
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC queue event_machine testLibrary nanny -pthread)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC queue event_machine testLibrary nanny server -pthread)

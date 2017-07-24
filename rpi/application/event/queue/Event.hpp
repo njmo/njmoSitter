@@ -19,7 +19,6 @@ struct Event
 	u32 senderId;
 	u8 payload[1];
 };
-
 }
 
 #endif /* APPLICATION_EVENT_EVENT_HPP_ */

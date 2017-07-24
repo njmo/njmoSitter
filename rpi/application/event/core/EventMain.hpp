@@ -34,8 +34,8 @@ public:
 	virtual ~EventMain();
 private:
 	EventHandler eventHandler;
-	bool suspended;
-	bool stopped;
+	volatile bool suspended;
+	volatile bool stopped;
 };
 
 } /* namespace event */

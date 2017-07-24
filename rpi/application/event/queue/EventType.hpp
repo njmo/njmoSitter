@@ -17,6 +17,7 @@ enum EventType
 	MusicPlayerEvent = 9998,
 	TimeoutEvent = 9999,
 	DisableQueueEvent,
+	NannyQuery,
 	TestEvent = 0
 };
 

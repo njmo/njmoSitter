@@ -14,6 +14,7 @@
 #include "utils/InterfaceFinder.hpp"
 #include <inc/Messages.hpp>
 #include <event/queue/Waiter.hpp>
+#include <interface/message/RegisterUser.hpp>
 
 #include <thread>
 #include <iostream>
@@ -26,6 +27,7 @@ public:
 	void create();
 	void handleTimeout();
 	void sendEvent();
+	void handleUserRegistration(RegisterUser *);
 	void notify(void *);
 	virtual ~Nanny();
 private:

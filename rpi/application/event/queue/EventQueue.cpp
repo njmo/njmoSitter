@@ -15,6 +15,7 @@ Event* EventQueue::pop()
 	Event *event = nullptr;
 	if(!eventList.empty())
 	{
+		nannyLogInfo("Popped event");
 		event = eventList.front();
 		eventList.pop_front();
 	}
@@ -25,6 +26,7 @@ void EventQueue::push(Event * event)
 {
 	std::lock_guard<std::mutex> lock(mutex);
 
+	nannyLogInfo("Pushed event");
 	eventList.push_back(event);
 }
 

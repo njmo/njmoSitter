@@ -49,6 +49,16 @@ void EventHandler::handleEvent(Event *event)
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);
 			break;
 		}
+		case NannyQuery:
+		{
+			nannyLogInfo("Catched NannyQuery");
+			if(*reinterpret_cast<u32*>(event->payload) == 5)
+			{
+				nannyLogInfo("Handled user registration query");
+				nanny.handleUserRegistration(reinterpret_cast<RegisterUser*>(&event->payload[4]));
+			}
+			break;
+		}
 		default:
 		{
 			break;

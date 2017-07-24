@@ -58,5 +58,9 @@ void Nanny::handleTimeout()
 		freed(resp);
 	}
 }
+void Nanny::handleUserRegistration(RegisterUser *regUserQuery)
+{
+	nannyLogInfo("Nanny is notified to register user" + std::to_string(regUserQuery->senderId));
+}
 
 } /* namespace app */

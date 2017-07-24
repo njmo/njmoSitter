@@ -36,7 +36,7 @@ void TimeoutGenerator::generateTimeouts()
 		i++;
 		if(i > 10)
 			break;
-		nanny.handleTimeout();
+		//nanny.handleTimeout();
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 	nannyLogInfo("registering nanny");

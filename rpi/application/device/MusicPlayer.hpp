@@ -21,7 +21,7 @@ enum PlayerState
 	unconfigured
 };
 
-class MusicPlayer {
+class MusicPlayer{
 public:
 	MusicPlayer();
 	MusicPlayer(std::string);

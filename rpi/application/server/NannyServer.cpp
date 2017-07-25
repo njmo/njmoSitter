@@ -67,7 +67,7 @@ void NannyServer::start()
 		else
 		{
 			nannyLogInfo("Creating new client");
-			PhoneThread* clientObject = new PhoneThread(newConnectionSocket,&clientSockAddr);
+			users.push_front(new PhoneThread(newConnectionSocket,&clientSockAddr));
 		}
 	}
 	nannyLogInfo("NannyServer is killed");
@@ -76,9 +76,17 @@ void NannyServer::stop()
 {
 	nannyLogInfo("NannyServer being killed");
 	isRunning = false;
-	close(sock);
+	shutdown(sock,SHUT_RD);
 }
 NannyServer::~NannyServer()
 {
-
+	nannyLogInfo("NannyServer Decttructor");
+	while(!users.empty())
+	{
+		PhoneThread* th = users.front();
+		th->kill();
+		th->join();
+		delete th;
+		users.pop_front();
+	}
 }

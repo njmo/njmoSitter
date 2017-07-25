@@ -41,4 +41,11 @@ void WaitingRoom::notifyWaiter(u32 sender,void* data)
 	}
 }
 
+void WaitingRoom::deregisterWaiter(u32 id)
+{
+	nannyLogInfo("Removing waiter from WaitingRoom");
+	std::lock_guard<std::mutex> lock(mutex);
+	waiters.erase(id);
+}
+
 } /* namespace app */

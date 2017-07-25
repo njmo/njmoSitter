@@ -55,7 +55,13 @@ void EventHandler::handleEvent(Event *event)
 			if(*reinterpret_cast<u32*>(event->payload) == 5)
 			{
 				nannyLogInfo("Handled user registration query");
-				nanny.handleUserRegistration(reinterpret_cast<RegisterUser*>(&event->payload[4]));
+				RegisterUser *data=reinterpret_cast<RegisterUser*>(&event->payload[4]);
+				data->senderId = event::EventQueue::getInstance().generateUserId();
+				nanny.handleUserRegistration(data);
+				RegisterResponse *rr = new RegisterResponse;
+				rr->registerStatus = static_cast<u8>(RegisterStatus::registered);
+				rr->assignedId = data->senderId;
+				event::EventQueue::getInstance().sendResponse(event->senderId,rr);
 			}
 			break;
 		}

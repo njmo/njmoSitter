@@ -36,7 +36,17 @@ void EventQueue::pushImportant(Event * event)
 
 	eventList.push_front(event);
 }
-
+u32 EventQueue::generateUserId()
+{
+	static u32 id = 0;
+	if(id < 100)
+	{
+		nannyLogInfo("Generating new id " + std::to_string(id));
+		return id++;
+	}
+	else
+		nannyLogError("Cant generate id");
+}
 void * EventQueue::pushAndWaitForResponse(Event *event)
 {
 	nannyLogInfo("Creating new Waiter id " + std::to_string(waiterCounter));
@@ -52,6 +62,16 @@ void EventQueue::notifyOnResponse(Event *event,queue::IWaiter &waiter)
 	nannyLogInfo("Notify Waiter with id " + std::to_string(event->senderId));
 	waitingRoom.registerWaiter(event->senderId,(queue::IWaiter*)&waiter);
 	push(event);
+}
+void EventQueue::registerAsWaiter(u32 assignedId,queue::IWaiter &waiter)
+{
+	nannyLogInfo("Register as waiter " + std::to_string(assignedId));
+	waitingRoom.registerWaiter(assignedId,(queue::IWaiter*)&waiter);
+}
+void EventQueue::deregister(u32 id)
+{
+	nannyLogInfo("Deregistering waiter " + std::to_string(id));
+	waitingRoom.deregisterWaiter(id);
 }
 void EventQueue::sendResponse(u32 sender,void* data)
 {

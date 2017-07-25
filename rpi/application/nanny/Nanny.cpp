@@ -9,6 +9,7 @@
 #include <event/event_data/MusicPlayerData.hpp>
 #include <event/event_data/TestData.hpp>
 
+
 namespace app {
 
 Nanny::Nanny()
@@ -61,6 +62,8 @@ void Nanny::handleTimeout()
 void Nanny::handleUserRegistration(RegisterUser *regUserQuery)
 {
 	nannyLogInfo("Nanny is notified to register user" + std::to_string(regUserQuery->senderId));
+	//User u;
+	userStorage.emplace(regUserQuery->senderId,User());
 }
 
 } /* namespace app */

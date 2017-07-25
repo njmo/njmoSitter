@@ -28,4 +28,8 @@ inline void freed(void *a)
 {
 	delete[] (((u32*)a)-2);
 }
+inline void freedNannyQuery(void *a)
+{
+	delete[] (((u32*)a)-3);
+}
 #endif /* MESSAGES_HPP_ */

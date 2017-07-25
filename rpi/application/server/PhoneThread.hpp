@@ -16,11 +16,13 @@
 #include <netinet/in.h>
 
 #include <thread>
+#include <mutex>
 #include <unistd.h>
 #include <inc/Messages.hpp>
 #include <event/queue/EventQueue.hpp>
 #include <event/queue/Waiter.hpp>
 #include <interface/message/RegisterUser.hpp>
+#include <interface/response/RegisterResponse.hpp>
 
 class PhoneThread : public std::thread , queue::IWaiter
 {
@@ -28,9 +30,13 @@ public:
 	PhoneThread(int,struct sockaddr_in*);
 	void test();
 	void notify(void *);
+	void kill();
 	virtual ~PhoneThread();
 private:
 	struct sockaddr_in clientAddr;
+	volatile bool isSuspended;
+	std::mutex mutex;
+	u32 id;
 	int socket;
 };
 

@@ -18,7 +18,7 @@ void Logger::log(std::string msg)
 	std::string timeInString(ctime(&tm));
 	timeInString.pop_back();
 
-	std::cout << timeInString << "\t" << msg << std::endl;
+	std::cout << timeInString << "|" << msg << std::endl;
 }
 
 void Logger::logInfo(std::string msg)

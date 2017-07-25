@@ -10,14 +10,16 @@
 
 #include <event/queue/EventQueue.hpp>
 #include <event/responses/TestResponse.hpp>
+#include <interface/message/RegisterUser.hpp>
 
 #include "utils/InterfaceFinder.hpp"
 #include <inc/Messages.hpp>
 #include <event/queue/Waiter.hpp>
-#include <interface/message/RegisterUser.hpp>
+#include <nanny/User.hpp>
 
 #include <thread>
 #include <iostream>
+#include <map>
 
 namespace app {
 
@@ -32,6 +34,7 @@ public:
 	virtual ~Nanny();
 private:
 	InterfaceFinder interfaceFinder;
+	std::map<u32,User> userStorage;
 };
 
 } /* namespace app */

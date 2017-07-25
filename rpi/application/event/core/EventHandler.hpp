@@ -15,6 +15,7 @@
 #include <event/executors/TestExecutor.hpp>
 #include <event/executors/MusicPlayerExecutor.hpp>
 #include <nanny/Nanny.hpp>
+#include <interface/response/RegisterResponse.hpp>
 
 namespace event {
 

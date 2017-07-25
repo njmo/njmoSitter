@@ -29,10 +29,13 @@ public:
 	void pushImportant(Event *);
 	void * pushAndWaitForResponse(Event *);
 	void notifyOnResponse(Event *,queue::IWaiter &);
+	void registerAsWaiter(u32,queue::IWaiter &);
+	void deregister(u32);
+	u32  generateUserId();
 	void sendResponse(u32,void*);
 private:
 	EventQueue()
-		: waiterCounter(0)
+		: waiterCounter(101)
 	{
 
 	}

@@ -13,9 +13,9 @@
 #include <inc/defines.hpp>
 #include <ctime>
 
-#define nannyLogInfo(x) utils::Logger::getLogger().logInfo("INF/{function : " + std::string(__FUNCTION__) + "}\t" + x)
-#define nannyLogError(x) utils::Logger::getLogger().logError("ERR/{function : " + std::string(__FUNCTION__) + "}\t" + x)
-#define nannyLogWarning(x) utils::Logger::getLogger().logWarning("WRN/{function : " + std::string(__FUNCTION__) + "}\t" + x)
+#define nannyLogInfo(x) utils::Logger::getLogger().logInfo("INF/" + std::string(__FILE__).substr(std::string(__FILE__).find_last_of("//") + 1) + "/" + std::string(__FUNCTION__) + ": " + x)
+#define nannyLogError(x) utils::Logger::getLogger().logError("ERR/" + std::string(__FILE__).substr(std::string(__FILE__).find_last_of("//") + 1) + "/" + std::string(__FUNCTION__) + ": " + x)
+#define nannyLogWarning(x) utils::Logger::getLogger().logWarning("WRN/" + std::string(__FILE__).substr(std::string(__FILE__).find_last_of("//") + 1) + "/" + std::string(__FUNCTION__) + ": " + x)
 
 namespace utils{
 

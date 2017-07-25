@@ -19,6 +19,7 @@ class WaitingRoom {
 public:
 	WaitingRoom();
 	void registerWaiter(u32,IWaiter *);
+	void deregisterWaiter(u32);
 	void notifyWaiter(u32,void*);
 	virtual ~WaitingRoom();
 private:

@@ -10,6 +10,7 @@
 #include <inc/defines.hpp>
 #include <utils/Logger/Logger.hpp>
 #include "PhoneThread.hpp"
+#include <list>
 
 enum ConnectionStatus
 {
@@ -32,6 +33,7 @@ public:
 private:
 	i32 sock;
 	i32 portNumber;
+	std::list<PhoneThread*> users;
 	struct sockaddr_in serv_addr;
 	static const i32 maxNumOfConnectionsQueue = 1;
 	volatile bool isRunning;

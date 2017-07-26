@@ -21,7 +21,6 @@ WaitingRoom::~WaitingRoom() {
 void WaitingRoom::registerWaiter(u32 sender,IWaiter *_waiter)
 {
 	std::lock_guard<std::mutex> lock(mutex);
-	nannyLogInfo("Registering waiter in WaitingRoom");
 	waiters.insert(std::pair<u32,IWaiter*>(sender,_waiter));
 }
 
@@ -31,9 +30,9 @@ void WaitingRoom::notifyWaiter(u32 sender,void* data)
 	auto waiter = waiters.find(sender);
 	if(waiter != waiters.end())
 	{
-		nannyLogInfo("NotifyWaiter in WaitingRoom");
 		waiter->second->notify(data);
-		waiters.erase(sender);
+		if ( sender > 101 )
+			waiters.erase(sender);
 	}
 	else
 	{

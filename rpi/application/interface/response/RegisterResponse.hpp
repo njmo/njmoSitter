@@ -7,6 +7,7 @@
 
 #ifndef APPLICATION_INTERFACE_RESPONSE_REGISTERRESPONSE_HPP_
 #define APPLICATION_INTERFACE_RESPONSE_REGISTERRESPONSE_HPP_
+#include <inc/defines.hpp>
 
 #include <inc/defines.hpp>
 enum RegisterStatus

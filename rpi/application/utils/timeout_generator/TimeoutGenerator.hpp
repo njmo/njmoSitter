@@ -13,6 +13,8 @@
 #include <nanny/Nanny.hpp>
 #include <thread>
 #include <chrono>
+#include <utils/Timer.hpp>
+#include <utils/Time.hpp>
 
 class TimeoutGenerator : public std::thread{
 public:

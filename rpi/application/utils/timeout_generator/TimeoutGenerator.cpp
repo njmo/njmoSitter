@@ -21,26 +21,23 @@ TimeoutGenerator::TimeoutGenerator(u32 duration,app::Nanny &_n)
 
 void TimeoutGenerator::generateTimeouts()
 {
-	int i=0;
+	u32 nextDuration = timeoutDuration;
+	Time time;
 	while(!stopped)
 	{
 		while(suspended)
 			;
-		std::this_thread::sleep_for(std::chrono::milliseconds(timeoutDuration));
+		std::this_thread::sleep_for(std::chrono::milliseconds(nextDuration));
 
-		/*event::Event *timeoutEvent = reinterpret_cast<event::Event*>(allocate<TimeoutData>());
-		timeoutEvent->type = event::TimeoutEvent;
-		TimeoutData &tmData = reinterpret_cast<TimeoutData&>(timeoutEvent->payload);
-		tmData.a = a++;
-		tmData.b = b++;*/
-		i++;
-		if(i > 10)
-			break;
-		//nanny.handleTimeout();
+		utils::Timer timer;
+		nanny.handleTimeout(time);
+		u32 msPassed = timer.getMilisecondPassed();
+
+		if(msPassed < timeoutDuration)
+			nextDuration=timeoutDuration-msPassed;
+
+		time+=timeoutDuration;
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-	nannyLogInfo("registering nanny");
-	nanny.sendEvent();
 }
 void TimeoutGenerator::suspend()
 {

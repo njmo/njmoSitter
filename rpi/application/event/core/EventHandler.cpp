@@ -32,12 +32,6 @@ void EventHandler::handleEvent(Event *event)
 			nannyLogInfo("Catched LoggerEvent");
 			break;
 		}
-		case TestEvent:
-		{
-			nannyLogInfo("Catched TestEvent");
-			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&testExecutor);
-			break;
-		}
 		case TimeoutEvent:
 		{
 			nannyLogInfo("Catched TimeoutEvent");
@@ -49,19 +43,37 @@ void EventHandler::handleEvent(Event *event)
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);
 			break;
 		}
+		case VoiceRecorderEvent:
+		{
+			nannyLogInfo("Catched VoiceRecorderEvent");
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&voiceRecorderExecutor);
+			break;
+		}
 		case NannyQuery:
 		{
-			nannyLogInfo("Catched NannyQuery");
-			if(*reinterpret_cast<u32*>(event->payload) == 5)
+			NannyRequest* nreq = reinterpret_cast<NannyRequest*>(event);
+			nannyLogInfo("Catched NannyQuery" + std::to_string(nreq->queryType));
+
+			switch(static_cast<NannyRequestType>(nreq->queryType)) // == static_cast<u8>(NannyRequestType::Register))
 			{
-				nannyLogInfo("Handled user registration query");
-				RegisterUser *data=reinterpret_cast<RegisterUser*>(&event->payload[4]);
-				data->senderId = event::EventQueue::getInstance().generateUserId();
-				nanny.handleUserRegistration(data);
-				RegisterResponse *rr = new RegisterResponse;
-				rr->registerStatus = static_cast<u8>(RegisterStatus::registered);
-				rr->assignedId = data->senderId;
-				event::EventQueue::getInstance().sendResponse(event->senderId,rr);
+				case NannyRequestType::Register:
+				{
+					nannyLogInfo("Handled user registration query");
+
+					NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<RegisterResponse,NannyResponse>());
+					nr->size = sizeof(RegisterResponse);
+
+					nanny.handleUserRegistration(nr->data,event::EventQueue::getInstance().generateUserId());
+
+					event::EventQueue::getInstance().sendResponse(event->senderId,nr);
+					break;
+				}
+				case NannyRequestType::NotifyWhenStartCrying:
+				{
+					nanny.handleUserRequestForVoiceRecorderNotify(nreq->payload,nreq->senderId);
+					//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+					break;
+				}
 			}
 			break;
 		}
@@ -74,6 +86,7 @@ void EventHandler::handleEvent(Event *event)
 	if( eventExecutor )
 	{
 		Response* resp = eventExecutor->execute(event->payload);
+
 		if(resp->status == Reponse_Ok && resp->type == WithReponse)
 		{
 			 event::EventQueue::getInstance().sendResponse(event->senderId,resp->data);

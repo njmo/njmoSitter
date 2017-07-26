@@ -22,7 +22,12 @@
 #include <event/queue/EventQueue.hpp>
 #include <event/queue/Waiter.hpp>
 #include <interface/message/RegisterUser.hpp>
+#include <interface/message/NotifyRequest.hpp>
 #include <interface/response/RegisterResponse.hpp>
+#include <interface/response/NannyResponse.hpp>
+
+#include <interface/message/NannyRequest.hpp>
+#include <interface/response/NannyResponse.hpp>
 
 class PhoneThread : public std::thread , queue::IWaiter
 {
@@ -33,6 +38,8 @@ public:
 	void kill();
 	virtual ~PhoneThread();
 private:
+	void sendNotifyRequest();
+
 	struct sockaddr_in clientAddr;
 	volatile bool isSuspended;
 	std::mutex mutex;

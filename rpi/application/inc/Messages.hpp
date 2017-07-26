@@ -11,17 +11,21 @@
 #include "defines.hpp"
 #include "event/queue/Event.hpp"
 
+#include <interface/message/NannyRequest.hpp>
+#include <event/queue/Event.hpp>
+
+#define NANNY_ID 101
 
 template<typename T>
 void *allocate()
 {
-	u32 size = sizeof(T) + ( 2*sizeof(u32));
+	u32 size = sizeof(T) + sizeof(event::Event) - 1;
 	return (void*)new u8[size];
 }
-template<typename T>
-void *allocateNannyQuery()
+template<typename T,typename D>
+void *allocateNanny()
 {
-	u32 size = sizeof(T) + ( 3*sizeof(u32));
+	u32 size = sizeof(T) + sizeof(D) - 1;
 	return (void*)new u8[size];
 }
 inline void freed(void *a)

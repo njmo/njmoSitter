@@ -28,6 +28,7 @@ public:
 	void push(Event *);
 	void pushImportant(Event *);
 	void * pushAndWaitForResponse(Event *);
+	void * pushImportantAndWaitForResponse(Event *);
 	void notifyOnResponse(Event *,queue::IWaiter &);
 	void registerAsWaiter(u32,queue::IWaiter &);
 	void deregister(u32);
@@ -35,7 +36,7 @@ public:
 	void sendResponse(u32,void*);
 private:
 	EventQueue()
-		: waiterCounter(101)
+		: waiterCounter(102)
 	{
 
 	}

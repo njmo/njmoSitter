@@ -24,24 +24,20 @@ public:
 		: waiting(true),
 		  data(nullptr)
 	{
-		nannyLogInfo("Waiter is born");
 	}
 	void* waitForResponse()
 	{
 		while( waiting )
 			;
-		nannyLogInfo("Waiter retrieve response data, returning value to code");
 		return data;
 	}
 	void notify(void *_data)
 	{
-		nannyLogInfo("Waiter is being notified");
 		data = _data;
 		waiting = false;
 	}
 	virtual ~Waiter()
 	{
-		nannyLogInfo("Waiter is being killed");
 	}
 private:
 	volatile bool waiting;

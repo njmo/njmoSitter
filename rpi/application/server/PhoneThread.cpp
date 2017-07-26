@@ -17,19 +17,31 @@ PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
 	memcpy(&clientAddr,_saddr,sizeof(clientAddr));
 
 	nannyLogInfo("Sending message to register");
-	event::Event *query = reinterpret_cast<event::Event*>(allocateNannyQuery<RegisterUser>());
-	query->type = static_cast<event::EventType>(event::NannyQuery);
-	*reinterpret_cast<u32*>(query->payload) = 5;
-	void *response = event::EventQueue::getInstance().pushAndWaitForResponse(query);
-	RegisterResponse *resp = reinterpret_cast<RegisterResponse*>(response);
+	NannyRequest *nannyRequest = reinterpret_cast<NannyRequest*>(allocateNanny<RegisterUser,NannyRequest>());
+	nannyRequest->requestType = static_cast<u32>(event::NannyQuery);
+	nannyRequest->queryType = static_cast<u8>(NannyRequestType::Register);
+
+	void *response = event::EventQueue::getInstance().pushAndWaitForResponse(reinterpret_cast<event::Event*>(nannyRequest));
+	NannyResponse *nr = reinterpret_cast<NannyResponse*>(response);
+	RegisterResponse *resp = reinterpret_cast<RegisterResponse*>(nr->data);
 	id=resp->assignedId;
 	if(resp->registerStatus == static_cast<u8>(RegisterStatus::registered) )
 		nannyLogInfo("Registration complete successfully id: " + std::to_string(id));
-	delete resp;
+
+	delete nr;
 	event::EventQueue::getInstance().registerAsWaiter(id,*this);
 	//waking up thread
 }
-
+void PhoneThread::sendNotifyRequest()
+{
+	NannyRequest *nannyRequest = reinterpret_cast<NannyRequest*>(allocateNanny<NotifyRequest,NannyRequest>());
+	nannyRequest->requestType = static_cast<u32>(event::NannyQuery);
+	nannyRequest->queryType = static_cast<u8>(NannyRequestType::NotifyWhenStartCrying);
+	nannyRequest->senderId = id;
+	NotifyRequest *notifyRequest = reinterpret_cast<NotifyRequest*>(nannyRequest->payload);
+	notifyRequest->notifyType = static_cast<u8>(NotifyRequestType::registerNotify);
+	event::EventQueue::getInstance().push(reinterpret_cast<event::Event*>(nannyRequest));
+}
 void PhoneThread::test()
 {
 	usleep(50); // use mutex before construction of PhoneThread object
@@ -44,7 +56,8 @@ void PhoneThread::test()
 			nannyLogError("Connection lost");
 			break;
 		}
-		nannyLogInfo("User received " + std::to_string(readBytes) + "bytes of data ");
+		sendNotifyRequest();
+		nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
 	}
 	event::EventQueue::getInstance().deregister(id);
 	nannyLogInfo("Killing PhoneThread connection");
@@ -52,11 +65,12 @@ void PhoneThread::test()
 
 void PhoneThread::notify(void *dataToSend)
 {
-	u32 size = *reinterpret_cast<u32*>(dataToSend);
-	u32 *data = reinterpret_cast<u32*>(dataToSend);
-	nannyLogError("Received data to send " + std::to_string(size));
-	if( write(socket,&data[1],size) < size )
-		nannyLogError("Error sending data to client");
+	NannyResponse *response = reinterpret_cast<NannyResponse*>(dataToSend);
+	const u32 size = response->size;
+
+	nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
+	//if( write(socket,response->data,size) < size )
+	//	nannyLogError("Error sending data to client");
 }
 void PhoneThread::kill()
 {

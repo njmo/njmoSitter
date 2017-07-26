@@ -57,6 +57,16 @@ void * EventQueue::pushAndWaitForResponse(Event *event)
 	void *response =  waiter.waitForResponse();
 	return response;
 }
+void * EventQueue::pushImportantAndWaitForResponse(Event *event)
+{
+	nannyLogInfo("Creating new Waiter id " + std::to_string(waiterCounter));
+	queue::Waiter waiter ;
+	event->senderId = waiterCounter;
+	waitingRoom.registerWaiter(waiterCounter++,(queue::IWaiter*)&waiter);
+	pushImportant(event);
+	void *response =  waiter.waitForResponse();
+	return response;
+}
 void EventQueue::notifyOnResponse(Event *event,queue::IWaiter &waiter)
 {
 	nannyLogInfo("Notify Waiter with id " + std::to_string(event->senderId));

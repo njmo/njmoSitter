@@ -8,14 +8,16 @@
 #ifndef APPLICATION_EVENT_EVENTHANDLER_HPP_
 #define APPLICATION_EVENT_EVENTHANDLER_HPP_
 #include <iostream>
+#include <inc/Messages.hpp>
 
 #include <event/queue/Event.hpp>
 #include <event/queue/EventQueue.hpp>
 
 #include <event/executors/TestExecutor.hpp>
 #include <event/executors/MusicPlayerExecutor.hpp>
+#include <event/executors/VoiceRecorderExecutor.hpp>
+
 #include <nanny/Nanny.hpp>
-#include <interface/response/RegisterResponse.hpp>
 
 namespace event {
 
@@ -28,6 +30,7 @@ private:
 	//message executors
 	executor::TestExecutor testExecutor;
 	executor::MusicPlayerExecutor musicPlayerExecutor;
+	executor::VoiceRecorderExecutor voiceRecorderExecutor;
 	app::Nanny &nanny;
 };
 

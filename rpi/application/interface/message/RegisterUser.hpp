@@ -7,6 +7,7 @@
 
 #ifndef APPLICATION_INTERFACE_MESSAGE_REGISTERUSER_HPP_
 #define APPLICATION_INTERFACE_MESSAGE_REGISTERUSER_HPP_
+#include <inc/defines.hpp>
 
 
 struct RegisterUser

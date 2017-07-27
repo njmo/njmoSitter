@@ -42,10 +42,22 @@ void PhoneThread::sendNotifyRequest()
 	notifyRequest->notifyType = static_cast<u8>(NotifyRequestType::registerNotify);
 	event::EventQueue::getInstance().push(reinterpret_cast<event::Event*>(nannyRequest));
 }
+void PhoneThread::sendNotifyCapture(u8 value)
+{
+	NannyRequest *nannyRequest = reinterpret_cast<NannyRequest*>(allocateNanny<CameraRequest,NannyRequest>());
+	nannyRequest->requestType = static_cast<u32>(event::NannyQuery);
+	nannyRequest->queryType = static_cast<u8>(NannyRequestType::CaptureCamera);
+	nannyRequest->senderId = id;
+	CameraRequest *notifyRequest = reinterpret_cast<CameraRequest*>(nannyRequest->payload);
+	notifyRequest->cameraType = value;
+	notifyRequest->fps = 10;
+	event::EventQueue::getInstance().push(reinterpret_cast<event::Event*>(nannyRequest));
+}
 void PhoneThread::test()
 {
 	usleep(50); // use mutex before construction of PhoneThread object
 	std::lock_guard<std::mutex> lock(mutex);
+	int i = 0;
 	nannyLogInfo("Starting PhoneThread connection");
 	while(true)
 	{
@@ -56,7 +68,15 @@ void PhoneThread::test()
 			nannyLogError("Connection lost");
 			break;
 		}
-		sendNotifyRequest();
+		if( i%2 == 0 )
+		{
+			sendNotifyCapture(0);
+			sendNotifyRequest();
+		}
+		else
+			sendNotifyCapture(1);
+		i++;
+
 		nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
 	}
 	event::EventQueue::getInstance().deregister(id);
@@ -66,11 +86,11 @@ void PhoneThread::test()
 void PhoneThread::notify(void *dataToSend)
 {
 	NannyResponse *response = reinterpret_cast<NannyResponse*>(dataToSend);
-	const u32 size = response->size;
-
-	nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
-	//if( write(socket,response->data,size) < size )
-	//	nannyLogError("Error sending data to client");
+	const u32 size = response->size / 4;
+	memset(response->data,'A',(800*3)*(600*3));
+	//nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
+	if( write(socket,response->data,size) < size )
+		nannyLogError("Error sending data to client");
 }
 void PhoneThread::kill()
 {

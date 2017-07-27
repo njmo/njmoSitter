@@ -22,44 +22,32 @@ EventHandler::~EventHandler() {
 
 void EventHandler::handleEvent(Event *event)
 {
-	nannyLogInfo("Handled new event");
 	executor::EventExecutor *eventExecutor = nullptr;
 
 	switch(event->type)
 	{
 		case LoggerEvent:
 		{
-			nannyLogInfo("Catched LoggerEvent");
-			break;
-		}
-		case TimeoutEvent:
-		{
-			nannyLogInfo("Catched TimeoutEvent");
 			break;
 		}
 		case MusicPlayerEvent:
 		{
-			nannyLogInfo("Catched MusicPlayerEvent");
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);
 			break;
 		}
 		case VoiceRecorderEvent:
 		{
-			nannyLogInfo("Catched VoiceRecorderEvent");
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&voiceRecorderExecutor);
 			break;
 		}
 		case NannyQuery:
 		{
 			NannyRequest* nreq = reinterpret_cast<NannyRequest*>(event);
-			nannyLogInfo("Catched NannyQuery" + std::to_string(nreq->queryType));
 
 			switch(static_cast<NannyRequestType>(nreq->queryType)) // == static_cast<u8>(NannyRequestType::Register))
 			{
 				case NannyRequestType::Register:
 				{
-					nannyLogInfo("Handled user registration query");
-
 					NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<RegisterResponse,NannyResponse>());
 					nr->size = sizeof(RegisterResponse);
 
@@ -71,6 +59,12 @@ void EventHandler::handleEvent(Event *event)
 				case NannyRequestType::NotifyWhenStartCrying:
 				{
 					nanny.handleUserRequestForVoiceRecorderNotify(nreq->payload,nreq->senderId);
+					//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+					break;
+				}
+				case NannyRequestType::CaptureCamera:
+				{
+					nanny.handleUserRequestForCaptureCamera(nreq->payload,nreq->senderId);
 					//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
 					break;
 				}

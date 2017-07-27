@@ -9,7 +9,9 @@
 
 User::User(u32 _id)
 	:	id(_id),
-		requestedForVoiceRecorder(false)
+		requestedForVoiceRecorder(false),
+		fps(0),
+		requestedForCamera(false)
 {
 	// TODO Auto-generated constructor stub
 

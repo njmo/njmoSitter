@@ -23,6 +23,7 @@
 #include <event/queue/Waiter.hpp>
 #include <interface/message/RegisterUser.hpp>
 #include <interface/message/NotifyRequest.hpp>
+#include <interface/message/CameraRequest.hpp>
 #include <interface/response/RegisterResponse.hpp>
 #include <interface/response/NannyResponse.hpp>
 
@@ -39,6 +40,7 @@ public:
 	virtual ~PhoneThread();
 private:
 	void sendNotifyRequest();
+	void sendNotifyCapture(u8);
 
 	struct sockaddr_in clientAddr;
 	volatile bool isSuspended;

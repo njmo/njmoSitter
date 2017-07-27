@@ -7,12 +7,15 @@
 
 #ifndef APPLICATION_NANNY_HPP_
 #define APPLICATION_NANNY_HPP_
-#include <interface/message/NannyRequest.hpp>
 #include <interface/response/NannyResponse.hpp>
-#include <interface/message/RegisterUser.hpp>
 #include <interface/response/RegisterResponse.hpp>
 #include <interface/response/VideoRecorderResponse.hpp>
+#include <interface/data/CameraData.hpp>
+
+#include <interface/message/RegisterUser.hpp>
+#include <interface/message/NannyRequest.hpp>
 #include <interface/message/NotifyRequest.hpp>
+#include <interface/message/CameraRequest.hpp>
 
 #include <event/queue/EventQueue.hpp>
 #include <event/responses/TestResponse.hpp>
@@ -33,17 +36,24 @@ class Nanny : queue::IWaiter{
 public:
 	Nanny();
 	void create();
-	void handleTimeout(Time&);
+	void handleTimeout(Time&,u32&);
 	void handleUserRegistration(void*, u32);
 	void handleUserRequestForVoiceRecorderNotify(void*,u32);
+	void handleUserRequestForCaptureCamera(void*,u32);
 	void notify(void *);
 	virtual ~Nanny();
 private:
 	bool sendVoiceRecorderCheck();
+	u32 calculateStep();
+	void sendCameraCapture();
 	void notifyAllRequestingUsers();
 
 	volatile bool isVoiceCheckRequested;
+	volatile bool isCameraCheckActive;
 	u32	timeVoiceLoud;
+	u8 activeFps;
+	u16 currentTimeStep;
+	u16 sendedFps;
 	InterfaceFinder interfaceFinder;
 	std::map<u32,User> userStorage;
 };

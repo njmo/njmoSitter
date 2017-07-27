@@ -15,11 +15,18 @@ public:
 	void registerForVoiceRecorderNotify();
 	void unRegisterForVoiceRecorderNotify();
 	bool hasRequestedForVoiceRecorderNotify();
+	u32 getFps() { return fps; }
+	void setFps(u32 _f){ fps = _f; }
+	bool hasRequestedForCamera() { return requestedForCamera; }
+	void registerForCamera() { requestedForCamera = true; }
+	void unRegisterForCamera() { requestedForCamera = false; }
 	u32 getId(){ return id; }
 	virtual ~User();
 private:
-	u32 id;
-	volatile bool requestedForVoiceRecorder;
+	u32  id;
+	bool requestedForVoiceRecorder;
+	bool requestedForCamera;
+	u32  fps;
 };
 
 #endif /* APPLICATION_NANNY_USER_HPP_ */

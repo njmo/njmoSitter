@@ -1,0 +1,20 @@
+/*
+ * CameraData.hpp
+ *
+ *  Created on: Jul 27, 2017
+ *      Author: njmo
+ */
+
+#ifndef APPLICATION_INTERFACE_RESPONSE_CAMERADATA_HPP_
+#define APPLICATION_INTERFACE_RESPONSE_CAMERADATA_HPP_
+
+#define CAMERA_DATA_SIZE (800*3)*(600*3)
+
+struct CameraData
+{
+	u8 tab[CAMERA_DATA_SIZE];
+};
+
+
+
+#endif /* APPLICATION_INTERFACE_RESPONSE_CAMERADATA_HPP_ */

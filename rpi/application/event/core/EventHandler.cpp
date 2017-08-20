@@ -42,33 +42,7 @@ void EventHandler::handleEvent(Event *event)
 		}
 		case NannyQuery:
 		{
-			NannyRequest* nreq = reinterpret_cast<NannyRequest*>(event);
-
-			switch(static_cast<NannyRequestType>(nreq->queryType)) // == static_cast<u8>(NannyRequestType::Register))
-			{
-				case NannyRequestType::Register:
-				{
-					NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<RegisterResponse,NannyResponse>());
-					nr->size = sizeof(RegisterResponse);
-
-					nanny.handleUserRegistration(nr->data,event::EventQueue::getInstance().generateUserId());
-
-					event::EventQueue::getInstance().sendResponse(event->senderId,nr);
-					break;
-				}
-				case NannyRequestType::NotifyWhenStartCrying:
-				{
-					nanny.handleUserRequestForVoiceRecorderNotify(nreq->payload,nreq->senderId);
-					//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
-					break;
-				}
-				case NannyRequestType::CaptureCamera:
-				{
-					nanny.handleUserRequestForCaptureCamera(nreq->payload,nreq->senderId);
-					//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
-					break;
-				}
-			}
+			handleNanny(*reinterpret_cast<NannyRequest*>(event));
 			break;
 		}
 		default:
@@ -88,6 +62,35 @@ void EventHandler::handleEvent(Event *event)
 		else
 		{
 			delete resp;
+		}
+	}
+}
+
+void EventHandler::handleNanny(NannyRequest &nannyRequest)
+{
+	switch(static_cast<NannyRequestType>(nannyRequest.queryType)) // == static_cast<u8>(NannyRequestType::Register))
+	{
+		case NannyRequestType::Register:
+		{
+			NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<RegisterResponse,NannyResponse>());
+			nr->size = sizeof(RegisterResponse);
+
+			nanny.handleUserRegistration(nr->data,event::EventQueue::getInstance().generateUserId());
+
+			event::EventQueue::getInstance().sendResponse(nannyRequest.senderId,nr);
+			break;
+		}
+		case NannyRequestType::NotifyWhenStartCrying:
+		{
+			nanny.handleUserRequestForVoiceRecorderNotify(nannyRequest.payload,nannyRequest.senderId);
+			//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+			break;
+		}
+		case NannyRequestType::CaptureCamera:
+		{
+			nanny.handleUserRequestForCaptureCamera(nannyRequest.payload,nannyRequest.senderId);
+			//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+			break;
 		}
 	}
 }

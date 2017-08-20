@@ -141,6 +141,7 @@ void Nanny::sendCameraCapture()
 {
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
 	vrResponse->size = CAMERA_DATA_SIZE;
+	memset(vrResponse->data,'A',CAMERA_DATA_SIZE);
 	std::map<u32,User>::iterator it;
 	for ( it = userStorage.begin(); it != userStorage.end(); it++ )
 	{
@@ -153,7 +154,7 @@ void Nanny::sendCameraCapture()
 			event::EventQueue::getInstance().sendResponse(user.getId(),vrResponse);
 		}
 	}
-	delete vrResponse;
+	//delete vrResponse;
 }
 bool Nanny::sendVoiceRecorderCheck()
 {

@@ -59,41 +59,58 @@ void PhoneThread::test()
 	std::lock_guard<std::mutex> lock(mutex);
 	int i = 0;
 	nannyLogInfo("Starting PhoneThread connection");
+	u32 fps=0;
+
 	while(true)
 	{
-		u8 buffer[1024];
-		int readBytes = read(socket,buffer,1024);
-		if(readBytes <= 0)
+		if(fps == 10)
 		{
-			nannyLogError("Connection lost");
-			break;
+			nannyLogInfo("Sended 10 frames");
+			fps=0;
 		}
-		if( i%2 == 0 )
+		int count;
+		ioctl(socket, FIONREAD, &count);
+		if( count > 0 )
 		{
-			sendNotifyCapture(0);
-			sendNotifyRequest();
-		}
-		else
-			sendNotifyCapture(1);
-		i++;
+			u8 buffer[1024];
+			int readBytes;
+			readBytes = read(socket,buffer,1024);
+			if(readBytes <= 0 )
+			{
+				nannyLogError("Connection lost");
+				break;
+			}
 
-		nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
+					if( i%2 == 0 )
+					{
+						sendNotifyCapture(0);
+						sendNotifyRequest();
+					}
+					else
+						sendNotifyCapture(1);
+					i++;
+			nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
+		}
+		if(!requestList.empty()){
+			NannyResponse *response = requestList.front();
+			requestList.pop_front();
+			const u32 size = response->size / 4;
+			//nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
+			if( write(socket,response->data,size) < size )
+				nannyLogError("Error sending data to client");
+			fps++;
+		}
 	}
-	event::EventQueue::getInstance().deregister(id);
 	nannyLogInfo("Killing PhoneThread connection");
 }
 
 void PhoneThread::notify(void *dataToSend)
 {
-	NannyResponse *response = reinterpret_cast<NannyResponse*>(dataToSend);
-	const u32 size = response->size / 4;
-	memset(response->data,'A',(800*3)*(600*3));
-	//nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
-	if( write(socket,response->data,size) < size )
-		nannyLogError("Error sending data to client");
+	requestList.push_back(reinterpret_cast<NannyResponse*>(dataToSend));
 }
 void PhoneThread::kill()
 {
+	event::EventQueue::getInstance().deregister(id);
 	shutdown(socket, SHUT_RD);
 }
 PhoneThread::~PhoneThread()

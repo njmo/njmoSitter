@@ -14,9 +14,11 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/ioctl.h>
 
 #include <thread>
 #include <mutex>
+#include <list>
 #include <unistd.h>
 #include <inc/Messages.hpp>
 #include <event/queue/EventQueue.hpp>
@@ -45,6 +47,7 @@ private:
 	struct sockaddr_in clientAddr;
 	volatile bool isSuspended;
 	std::mutex mutex;
+	std::list<NannyResponse*> requestList;
 	u32 id;
 	int socket;
 };

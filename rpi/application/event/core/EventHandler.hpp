@@ -13,7 +13,6 @@
 #include <event/queue/Event.hpp>
 #include <event/queue/EventQueue.hpp>
 
-#include <event/executors/TestExecutor.hpp>
 #include <event/executors/MusicPlayerExecutor.hpp>
 #include <event/executors/VoiceRecorderExecutor.hpp>
 
@@ -25,10 +24,10 @@ class EventHandler {
 public:
 	EventHandler(app::Nanny&);
 	void handleEvent(Event *);
+	void handleNanny(NannyRequest &);
 	virtual ~EventHandler();
 private:
 	//message executors
-	executor::TestExecutor testExecutor;
 	executor::MusicPlayerExecutor musicPlayerExecutor;
 	executor::VoiceRecorderExecutor voiceRecorderExecutor;
 	app::Nanny &nanny;

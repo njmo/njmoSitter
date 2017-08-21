@@ -16,6 +16,7 @@ enum EventType
 	LoggerEvent = 99,
 	MusicPlayerEvent = 9998,
 	VoiceRecorderEvent,
+	CameraCaptureFrame,
 	DisableQueueEvent,
 	NannyQuery,
 	TestEvent = 0

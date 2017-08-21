@@ -40,6 +40,11 @@ void EventHandler::handleEvent(Event *event)
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&voiceRecorderExecutor);
 			break;
 		}
+		case CameraCaptureFrame:
+		{
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&cameraCaptureExecutor);
+			break;
+		}
 		case NannyQuery:
 		{
 			handleNanny(*reinterpret_cast<NannyRequest*>(event));

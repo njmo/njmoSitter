@@ -139,9 +139,15 @@ void Nanny::notifyAllRequestingUsers()
 }
 void Nanny::sendCameraCapture()
 {
+	event::Event* checkVR = reinterpret_cast<event::Event*>(allocate<TestData>());
+	checkVR->senderId = NANNY_ID;
+	checkVR->type = event::EventType::CameraCaptureFrame;
+	CameraCaptureResponse * response = reinterpret_cast<CameraCaptureResponse *>(event::EventQueue::getInstance().pushImportantAndWaitForResponse(checkVR));
+
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
-	vrResponse->size = CAMERA_DATA_SIZE;
-	memset(vrResponse->data,'A',CAMERA_DATA_SIZE);
+	vrResponse->size = response->size*4;
+	memcpy(vrResponse->data,response->frame,response->size);
+
 	std::map<u32,User>::iterator it;
 	for ( it = userStorage.begin(); it != userStorage.end(); it++ )
 	{

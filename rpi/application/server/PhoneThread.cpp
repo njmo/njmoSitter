@@ -95,7 +95,6 @@ void PhoneThread::test()
 			NannyResponse *response = requestList.front();
 			requestList.pop_front();
 			const u32 size = response->size / 4;
-			//nannyLogError("Received data to send " + std::to_string(size) + "my id " + std::to_string(id) + " received id " + std::to_string(response->id));
 			if( write(socket,response->data,size) < size )
 				nannyLogError("Error sending data to client");
 			fps++;

@@ -26,10 +26,10 @@ public:
 	};
 
 	void mainLoop();
-	bool isSuspended() { return suspended; }
+	bool isSuspended() { return suspended; nannyLogInfo("suspended");}
 	void suspend() { suspended = true; nannyLogInfo("Going to sleep"); }
 	void kill(){ stopped = true; nannyLogInfo("received kill command"); }
-	void wakeUp() { suspended = false; }
+	void wakeUp() { suspended = false; nannyLogInfo("wake up");}
 	bool isRunning() { return !stopped; }
 	virtual ~EventMain();
 private:

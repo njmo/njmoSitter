@@ -10,6 +10,7 @@
 #include <interface/response/NannyResponse.hpp>
 #include <interface/response/RegisterResponse.hpp>
 #include <interface/response/VideoRecorderResponse.hpp>
+#include <interface/response/CameraCaptureResponse.hpp>
 #include <interface/data/CameraData.hpp>
 
 #include <interface/message/RegisterUser.hpp>

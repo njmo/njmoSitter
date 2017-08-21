@@ -22,6 +22,11 @@ void *allocate()
 	u32 size = sizeof(T) + sizeof(event::Event) - 1;
 	return (void*)new u8[size];
 }
+inline void *allocate(u32 _s)
+{
+	u32 size = _s + sizeof(event::Event) - 1;
+	return (void*)new u8[size];
+}
 template<typename T,typename D>
 void *allocateNanny()
 {

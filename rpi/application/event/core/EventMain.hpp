@@ -11,6 +11,8 @@
 #include <event/queue/EventQueue.hpp>
 #include <nanny/Nanny.hpp>
 #include <thread>
+#include <mutex>
+#include <unistd.h>
 
 namespace event {
 

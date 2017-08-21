@@ -15,6 +15,8 @@ Camera::Camera()
 	if (!cap.isOpened()) {
 		 nannyLogError("OpenCV Failed to open camera");
 	}
+	Mat m;
+	cap >> m;
 }
 
 

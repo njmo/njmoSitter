@@ -19,7 +19,7 @@ CameraCaptureExecutor::CameraCaptureExecutor() {
 Response* CameraCaptureExecutor::execute(void *)
 {
 	CameraCaptureResponse response;
-	//camera.getFrame(response);
+	camera.getFrame(response);
 
 	Response *resp = reinterpret_cast<Response *>(allocate(response.size + 4));
 	resp->status = Reponse_Ok;

@@ -25,7 +25,7 @@ public:
 	Response* execute(void *);
 	virtual ~CameraCaptureExecutor();
 
-	//device::Camera camera;
+	device::Camera camera;
 };
 
 } /* namespace executor */

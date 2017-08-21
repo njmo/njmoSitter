@@ -15,6 +15,8 @@ EventMain::~EventMain() {
 
 void EventMain::mainLoop()
 {
+	suspended = true;
+	stopped = false;
 	nannyLogInfo("Starting MainEvent loop");
 	while(isRunning())
 	{

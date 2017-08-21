@@ -146,6 +146,7 @@ void Nanny::sendCameraCapture()
 
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
 	vrResponse->size = response->size*4;
+  //nannyLogInfo("Size of message " + std::to_string(vrResponse->size);
 	memcpy(vrResponse->data,response->frame,response->size);
 
 	std::map<u32,User>::iterator it;

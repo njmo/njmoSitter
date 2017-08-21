@@ -15,15 +15,13 @@ Camera::Camera()
 	if (!cap.isOpened()) {
 		 nannyLogError("OpenCV Failed to open camera");
 	}
-	Mat m;
-	cap >> m;
 }
 
 
 void Camera::getFrame(CameraCaptureResponse &response)
 {
 	Mat frame,send;
-	int jpegqual = 80;
+	int jpegqual = 50;
 	std::vector < uchar > encoded;
 	cap >> frame;
 	resize(frame, send, Size(800, 600), 0, 0, INTER_LINEAR);
@@ -31,12 +29,15 @@ void Camera::getFrame(CameraCaptureResponse &response)
 	compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
 	compression_params.push_back(jpegqual);
 
+  utils::Timer timer;
 	imencode(".jpg", send, encoded, compression_params);
-	imshow("send", send);
+	u32 msPassed = timer.getMilisecondPassed();
+	//imshow("send", send);
 	int total_pack = 1 + (encoded.size() - 1) / 4096 ;
 
 	const u32 sizeOfFrame = encoded.size();
 	response.size = sizeOfFrame;
+  nannyLogInfo("Collecting data from camera" + std::to_string(msPassed));
 	memcpy(response.frame,&encoded,sizeOfFrame);
 }
 

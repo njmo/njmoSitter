@@ -13,6 +13,7 @@
 #include <cstring>
 #include <utils/Logger/Logger.hpp>
 #include <vector>
+#include <utils/Timer.hpp>
 
 using namespace cv;
 

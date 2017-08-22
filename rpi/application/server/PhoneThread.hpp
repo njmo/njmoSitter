@@ -46,6 +46,7 @@ private:
 
 	struct sockaddr_in clientAddr;
 	volatile bool isSuspended;
+  volatile bool isRunning;
 	std::mutex mutex;
 	std::list<NannyResponse*> requestList;
 	u32 id;

@@ -29,7 +29,7 @@ Nanny::~Nanny() {
 
 void Nanny::create()
 {
-	interfaceFinder.init("enp0s8");
+	interfaceFinder.init("eth0");
 	event::EventQueue::getInstance().registerAsWaiter(NANNY_ID,*this);
 }
 
@@ -145,9 +145,10 @@ void Nanny::sendCameraCapture()
 	CameraCaptureResponse * response = reinterpret_cast<CameraCaptureResponse *>(event::EventQueue::getInstance().pushImportantAndWaitForResponse(checkVR));
 
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
-	vrResponse->size = response->size*4;
-  //nannyLogInfo("Size of message " + std::to_string(vrResponse->size);
+	vrResponse->size = response->size;
+
 	memcpy(vrResponse->data,response->frame,response->size);
+  freed(response);
 
 	std::map<u32,User>::iterator it;
 	for ( it = userStorage.begin(); it != userStorage.end(); it++ )

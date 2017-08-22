@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
 	app::Nanny nanny;
 	event::EventMain eventMain(nanny);
-	TimeoutGenerator timeoutGenerator(50,nanny);
+	TimeoutGenerator timeoutGenerator(200,nanny);
 	NannyServer nannyServer(1234);
 	nannyServer.init();
 	nanny.create();

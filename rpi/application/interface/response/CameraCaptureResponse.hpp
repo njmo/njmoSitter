@@ -13,7 +13,7 @@
 
 struct CameraCaptureResponse
 {
-	int size;
+  u32 size;
 	u8 frame[MAX_SIZE];
 };
 

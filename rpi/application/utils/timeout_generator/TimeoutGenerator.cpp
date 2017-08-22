@@ -28,10 +28,12 @@ void TimeoutGenerator::generateTimeouts()
 		while(suspended)
 			;
 		std::this_thread::sleep_for(std::chrono::milliseconds(nextDuration));
-
-		utils::Timer timer;
+		//utils::Timer timer;
+    auto t_start = std::chrono::high_resolution_clock::now();
 		nanny.handleTimeout(time,timeoutDuration);
-		u32 msPassed = timer.getMilisecondPassed();
+	//	u32 msPassed = timer.getMilisecondPassed();
+    auto t_end = std::chrono::high_resolution_clock::now();
+		u32 msPassed = std::chrono::duration<double, std::milli>(t_end-t_start).count();
 
 		if(msPassed && msPassed < timeoutDuration)
 		{
@@ -40,7 +42,7 @@ void TimeoutGenerator::generateTimeouts()
 		else if(msPassed)
 		{
 			u32 wasted = msPassed - timeoutDuration;
-			nannyLogError("Skipped " + std::to_string(wasted) + " miliseconds");
+			nannyLogError("Wasted " + std::to_string(wasted) + " miliseconds");
 			nextDuration = 0;
 		}
 

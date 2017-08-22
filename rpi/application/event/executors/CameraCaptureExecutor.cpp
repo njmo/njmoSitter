@@ -21,7 +21,7 @@ Response* CameraCaptureExecutor::execute(void *)
 	CameraCaptureResponse response;
 	camera.getFrame(response);
 
-	Response *resp = reinterpret_cast<Response *>(allocate(response.size + 4));
+	Response *resp = reinterpret_cast<Response *>(allocate((response.size*4) + 12));
 	resp->status = Reponse_Ok;
 	resp->type = WithReponse;
 	memcpy(resp->data,&response,response.size + 4);

@@ -20,7 +20,7 @@ public:
 	}
 	u32 getMilisecondPassed()
 	{
-		return ( (float)clock() - timeStarted) / (CLOCKS_PER_SEC / 1000.0);
+		return ( 1000 * ((float)clock() - timeStarted)) / CLOCKS_PER_SEC ;
 	}
 	~Timer()
 	{

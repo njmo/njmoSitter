@@ -9,6 +9,7 @@
 
 PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
 	: std::thread(&PhoneThread::test, this),
+    isRunning(true),
 	  socket(_socket)
 {
 	std::lock_guard<std::mutex> lock(mutex);
@@ -50,22 +51,24 @@ void PhoneThread::sendNotifyCapture(u8 value)
 	nannyRequest->senderId = id;
 	CameraRequest *notifyRequest = reinterpret_cast<CameraRequest*>(nannyRequest->payload);
 	notifyRequest->cameraType = value;
-	notifyRequest->fps = 10;
+	notifyRequest->fps = 5;
 	event::EventQueue::getInstance().push(reinterpret_cast<event::Event*>(nannyRequest));
 }
 void PhoneThread::test()
 {
 	usleep(50); // use mutex before construction of PhoneThread object
-	std::lock_guard<std::mutex> lock(mutex);
+  {
+  	std::lock_guard<std::mutex> lock(mutex);
+  }
 	int i = 0;
 	nannyLogInfo("Starting PhoneThread connection");
 	u32 fps=0;
 
-	while(true)
+	while(isRunning)
 	{
-		if(fps == 10)
+		if(fps == 5)
 		{
-			nannyLogInfo("Sended 10 frames");
+			nannyLogInfo("Sended 5 frames");
 			fps=0;
 		}
 		int count;
@@ -92,13 +95,14 @@ void PhoneThread::test()
 			nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
 		}
 		if(!requestList.empty()){
+	    std::lock_guard<std::mutex> lock(mutex);
 			NannyResponse *response = requestList.front();
 			requestList.pop_front();
-			const u32 size = response->size / 4;
-      nannyLogInfo("Sending " + std::to_string(size));
+			const u32 size = response->size;
 			if( write(socket,response->data,size) < size )
 				nannyLogError("Error sending data to client");
 			fps++;
+      delete response;
 		}
 	}
 	nannyLogInfo("Killing PhoneThread connection");
@@ -106,11 +110,13 @@ void PhoneThread::test()
 
 void PhoneThread::notify(void *dataToSend)
 {
+	std::lock_guard<std::mutex> lock(mutex);
 	requestList.push_back(reinterpret_cast<NannyResponse*>(dataToSend));
 }
 void PhoneThread::kill()
 {
 	event::EventQueue::getInstance().deregister(id);
+  isRunning=false;
 	shutdown(socket, SHUT_RD);
 }
 PhoneThread::~PhoneThread()

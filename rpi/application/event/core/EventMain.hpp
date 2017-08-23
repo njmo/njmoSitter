@@ -31,7 +31,7 @@ public:
 	bool isSuspended() { return suspended; nannyLogInfo("suspended");}
 	void suspend() { suspended = true; nannyLogInfo("Going to sleep"); }
 	void kill(){ stopped = true; nannyLogInfo("received kill command"); }
-	void wakeUp() { suspended = false; nannyLogInfo("wake up");}
+	void wakeUp() { suspended = false;}
 	bool isRunning() { return !stopped; }
 	virtual ~EventMain();
 private:

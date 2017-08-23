@@ -11,9 +11,8 @@ namespace event {
 namespace executor {
 
 MusicPlayerExecutor::MusicPlayerExecutor()
-//	: musicPlayer(_player)
 {
-
+  musicPlayer.initialize();
   readSongs();
   json j(aviavableSongs);
   nannyLogInfo(j.dump());

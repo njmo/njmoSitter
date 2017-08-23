@@ -11,13 +11,16 @@
 #include <list>
 #include <utils/Logger/Logger.hpp>
 
-namespace device {
+#include <alsa/asoundlib.h>
 
+namespace device {
+#define PCM_DEVICE "default"
 enum PlayerState
 {
 	playing,
 	stopped,
 	configured,
+  failedOnConfiguration,
 	unconfigured
 };
 
@@ -37,6 +40,9 @@ public:
 
 	virtual ~MusicPlayer();
 private:
+  u32 buff_size;
+  snd_pcm_t *pcm_handle;
+  snd_pcm_hw_params_t *params;
 	PlayerState state;
 };
 

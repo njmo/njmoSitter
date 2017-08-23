@@ -27,6 +27,12 @@ Nanny::~Nanny() {
 	nannyLogInfo("eventMain and  timeoutGenerator killed");
 }
 
+bool Nanny::shouldSendCamera(Time &time)
+{
+  
+
+}
+
 void Nanny::create()
 {
 	interfaceFinder.init("eth0");

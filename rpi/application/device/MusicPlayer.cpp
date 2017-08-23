@@ -16,13 +16,9 @@ MusicPlayer::MusicPlayer()
 
 }
 
-MusicPlayer::MusicPlayer(std::string)
-: state(unconfigured)
-{
-
-}
 void MusicPlayer::initialize()
 {
+  state = configured;
 
 }
 
@@ -36,18 +32,9 @@ void MusicPlayer::play(std::string)
 
 }
 
-void MusicPlayer::changeDirectory(std::string)
+PlayerState MusicPlayer::getState()
 {
-
-}
-std::list<std::string> MusicPlayer::getSongs()
-{
-	return std::list<std::string>();
-}
-
-PlayerState MusicPlayer::getMusicPlayerState()
-{
-	return playing;
+	return state;
 }
 
 MusicPlayer::~MusicPlayer() {

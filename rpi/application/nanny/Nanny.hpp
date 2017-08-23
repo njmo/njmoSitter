@@ -46,6 +46,7 @@ public:
 private:
 	bool sendVoiceRecorderCheck();
 	u32 calculateStep();
+  bool shouldSendCamera(Time &);
 	void sendCameraCapture();
 	void notifyAllRequestingUsers();
 

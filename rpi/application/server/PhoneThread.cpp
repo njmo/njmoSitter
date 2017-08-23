@@ -12,7 +12,7 @@ PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
     isRunning(true),
 	  socket(_socket)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+//	std::lock_guard<std::mutex> lock(mutex);
 
 	bzero((char *) &clientAddr, sizeof(clientAddr));
 	memcpy(&clientAddr,_saddr,sizeof(clientAddr));
@@ -57,9 +57,7 @@ void PhoneThread::sendNotifyCapture(u8 value)
 void PhoneThread::test()
 {
 	usleep(50); // use mutex before construction of PhoneThread object
-  {
-  	std::lock_guard<std::mutex> lock(mutex);
-  }
+  isRunning=true;
 	int i = 0;
 	nannyLogInfo("Starting PhoneThread connection");
 	u32 fps=0;

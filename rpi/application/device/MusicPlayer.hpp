@@ -21,25 +21,22 @@ enum PlayerState
 	unconfigured
 };
 
-class MusicPlayer{
+class MusicPlayer
+{
 public:
 	MusicPlayer();
-	MusicPlayer(std::string);
 	void initialize();
 
 	void stop();
-	//resume
-	//pause
 	void play(std::string);
 
-	void changeDirectory(std::string);
-	std::list<std::string> getSongs();
+  void pause(){}
+  void resume(){}
 
-	PlayerState getMusicPlayerState();
+	PlayerState getState();
 
 	virtual ~MusicPlayer();
 private:
-	std::string directory;
 	PlayerState state;
 };
 

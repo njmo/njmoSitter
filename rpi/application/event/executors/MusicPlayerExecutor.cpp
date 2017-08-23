@@ -13,12 +13,42 @@ namespace executor {
 MusicPlayerExecutor::MusicPlayerExecutor()
 //	: musicPlayer(_player)
 {
-	// TODO Auto-generated constructor stub
+
+  readSongs();
+  json j(aviavableSongs);
+  nannyLogInfo(j.dump());
+}
+
+MusicPlayerExecutor::~MusicPlayerExecutor() 
+{
 
 }
 
-MusicPlayerExecutor::~MusicPlayerExecutor() {
-	// TODO Auto-generated destructor stub
+void MusicPlayerExecutor::readSongs()
+{
+  DIR* FD;
+  struct dirent* in_file;
+
+  if (NULL == (FD = opendir ("/home/pi/songs"))) 
+  {
+      fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
+      //return 1;
+  }
+
+  while ((in_file = readdir(FD))) 
+  {
+      if (!strcmp (in_file->d_name, "."))
+          continue;
+      if (!strcmp (in_file->d_name, ".."))    
+          continue;
+
+      const std::string fileName = in_file->d_name;
+      if( getFileExtension(fileName) == "wav" )
+      {
+        aviavableSongs.push_back(fileName); 
+        nannyLogInfo("Found file " + fileName);
+      }
+  }
 }
 
 Response* MusicPlayerExecutor::execute(void *_data)
@@ -30,6 +60,11 @@ Response* MusicPlayerExecutor::execute(void *_data)
 			nannyLogInfo("stoping Music");
 			//musicPlayer.stop();
 			break;
+    case playMusic:
+    {
+      musicPlayer.play("/home/pi/songs/" + aviavableSongs.at(data->songId));
+      break;
+    }
 		default:
 			break;
 	}

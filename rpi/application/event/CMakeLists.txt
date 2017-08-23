@@ -1,6 +1,7 @@
 project(event_machine)
 
 include_directories("${PROJECT_SOURCE_DIR}")
+add_definitions("-std=c++14 -Ofast -fPIC")
 
 
 find_package( OpenCV REQUIRED )

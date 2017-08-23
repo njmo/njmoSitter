@@ -14,19 +14,22 @@ namespace utils {
 class Timer {
 public:
 	Timer()
-		:timeStarted(std::clock())
+		: start(std::chrono::high_resolution_clock::now())
 	{
 
 	}
 	u32 getMilisecondPassed()
 	{
-		return ( 1000 * ((float)clock() - timeStarted)) / CLOCKS_PER_SEC ;
+    auto stop = std::chrono::high_resolution_clock::now();
+		u32 msPassed = std::chrono::duration<double, std::milli>(stop-start).count();
+    return msPassed;
 	}
 	~Timer()
 	{
 
 	}
-	clock_t timeStarted;
+
+  std::chrono::time_point<std::chrono::high_resolution_clock> start;
 };
 
 } /* namespace utils */

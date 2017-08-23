@@ -28,12 +28,9 @@ void TimeoutGenerator::generateTimeouts()
 		while(suspended)
 			;
 		std::this_thread::sleep_for(std::chrono::milliseconds(nextDuration));
-		//utils::Timer timer;
-    auto t_start = std::chrono::high_resolution_clock::now();
+		utils::Timer timer;
 		nanny.handleTimeout(time,timeoutDuration);
-	//	u32 msPassed = timer.getMilisecondPassed();
-    auto t_end = std::chrono::high_resolution_clock::now();
-		u32 msPassed = std::chrono::duration<double, std::milli>(t_end-t_start).count();
+		u32 msPassed = timer.getMilisecondPassed();
 
 		if(msPassed && msPassed < timeoutDuration)
 		{

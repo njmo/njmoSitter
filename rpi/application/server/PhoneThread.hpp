@@ -32,6 +32,10 @@
 #include <interface/message/NannyRequest.hpp>
 #include <interface/response/NannyResponse.hpp>
 
+// downloaded from https://github.com/nlohmann/json
+#include <utils/json.hpp>
+using nlohmann::json;
+
 class PhoneThread : public std::thread , queue::IWaiter
 {
 public:
@@ -48,6 +52,7 @@ private:
 	volatile bool isSuspended;
   volatile bool isRunning;
 	std::mutex mutex;
+  u32 nannyId;
 	std::list<NannyResponse*> requestList;
 	u32 id;
 	int socket;

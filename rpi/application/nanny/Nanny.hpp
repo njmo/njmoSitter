@@ -27,6 +27,10 @@
 #include <nanny/User.hpp>
 #include <utils/Time.hpp>
 
+// downloaded from https://github.com/nlohmann/json
+#include <utils/json.hpp>
+using nlohmann::json;
+
 #include <thread>
 #include <iostream>
 #include <map>
@@ -49,6 +53,7 @@ private:
   bool shouldSendCamera(Time &);
 	void sendCameraCapture();
 	void notifyAllRequestingUsers();
+  void sendBroadcastRequest();
 
 	volatile bool isVoiceCheckRequested;
 	volatile bool isCameraCheckActive;
@@ -56,7 +61,6 @@ private:
 	u8 activeFps;
 	u16 currentTimeStep;
 	u16 sendedFps;
-	InterfaceFinder interfaceFinder;
 	std::map<u32,User> userStorage;
 };
 

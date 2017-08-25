@@ -10,7 +10,8 @@
 PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
 	: std::thread(&PhoneThread::test, this),
     isRunning(true),
-	  socket(_socket)
+	  socket(_socket),
+    nannyId(0)
 {
 //	std::lock_guard<std::mutex> lock(mutex);
 
@@ -26,6 +27,7 @@ PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
 	NannyResponse *nr = reinterpret_cast<NannyResponse*>(response);
 	RegisterResponse *resp = reinterpret_cast<RegisterResponse*>(nr->data);
 	id=resp->assignedId;
+  nannyId = resp->nannyId;
 	if(resp->registerStatus == static_cast<u8>(RegisterStatus::registered) )
 		nannyLogInfo("Registration complete successfully id: " + std::to_string(id));
 
@@ -73,7 +75,7 @@ void PhoneThread::test()
 		ioctl(socket, FIONREAD, &count);
 		if( count > 0 )
 		{
-			u8 buffer[1024];
+			i8 buffer[1024];
 			int readBytes;
 			readBytes = read(socket,buffer,1024);
 			if(readBytes <= 0 )
@@ -81,15 +83,24 @@ void PhoneThread::test()
 				nannyLogError("Connection lost");
 				break;
 			}
+      
+      try
+      {
+        json *j = new json(json::parse(std::string(buffer)));
+	      event::EventQueue::getInstance().sendResponse(nannyId,j);
+      }catch(...){}
 
-					if( i%2 == 0 )
-					{
-						sendNotifyCapture(0);
-						sendNotifyRequest();
-					}
-					else
-						sendNotifyCapture(1);
-					i++;
+      
+//      json *j = new json(std::string(buffer)_json);
+
+			if( i%2 == 0 )
+			{
+				sendNotifyCapture(0);
+				sendNotifyRequest();
+			}
+			else
+				sendNotifyCapture(1);
+			i++;
 			nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
 		}
 		if(!requestList.empty()){

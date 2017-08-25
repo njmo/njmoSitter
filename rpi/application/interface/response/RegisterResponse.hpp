@@ -20,6 +20,7 @@ struct RegisterResponse
 {
 	u8 registerStatus;
 	u32 assignedId;
+  u32 nannyId;
 };
 
 

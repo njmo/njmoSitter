@@ -12,6 +12,10 @@
 #include "PhoneThread.hpp"
 #include <list>
 
+// downloaded from https://github.com/nlohmann/json
+#include <utils/json.hpp>
+using nlohmann::json;
+
 enum ConnectionStatus
 {
 	NotInitialized,

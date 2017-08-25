@@ -35,15 +35,24 @@ bool Nanny::shouldSendCamera(Time &time)
 
 void Nanny::create()
 {
-	interfaceFinder.init("eth0");
 	event::EventQueue::getInstance().registerAsWaiter(NANNY_ID,*this);
 }
 
 void Nanny::notify(void * ev)
 {
+  json* j = reinterpret_cast<json*>(ev);
 	nannyLogInfo("Nanny is notified");
-	freed(ev);
+
+  delete j;
 }
+
+void Nanny::sendBroadcastRequest()
+{
+	event::Event* broadcastEvent= reinterpret_cast<event::Event*>(allocate<TestData>());
+	broadcastEvent->type = event::EventType::Broadcast;
+	event::EventQueue::getInstance().push(broadcastEvent);
+}
+
 void Nanny::handleTimeout(Time &time,u32 &duration)
 {
 	if( isCameraCheckActive && ( time.getMilisecond() % (ONE_SECOND_IN_MILISECOND/activeFps) == 0))
@@ -55,6 +64,7 @@ void Nanny::handleTimeout(Time &time,u32 &duration)
 	{
 		if((time.getSecond() % 1 )== 0)
 		{
+      sendBroadcastRequest();
 			if( isCameraCheckActive )
 			{
 				nannyLogInfo("Sending with fps: " + std::to_string(sendedFps));
@@ -82,6 +92,7 @@ void Nanny::handleUserRegistration(void* resp,u32 assignedId)
 
 	response->registerStatus = static_cast<u8>(RegisterStatus::registered);
 	response->assignedId = assignedId;
+  response->nannyId = NANNY_ID;
 
 	userStorage.emplace(assignedId,User(assignedId));
 }

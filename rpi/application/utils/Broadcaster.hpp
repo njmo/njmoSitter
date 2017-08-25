@@ -15,22 +15,20 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-struct NannyBroadcasMessage
-{
-	i8 addr[INET_ADDRSTRLEN];
-	i32 port;
-};
+// downloaded from https://github.com/nlohmann/json
+#include <utils/json.hpp>
+using nlohmann::json;
 
 class Broadcaster {
 public:
-	Broadcaster(InterfaceFinder&);
+	Broadcaster();
 
 	void broadcastNannyAddress();
 
 	virtual ~Broadcaster();
 private:
 	int sock;
-	InterfaceFinder& interfaceFinder;
+	InterfaceFinder interfaceFinder;
 };
 
 #endif /* APPLICATION_UTILS_BROADCASTER_HPP_ */

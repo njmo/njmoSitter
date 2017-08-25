@@ -30,6 +30,11 @@ void EventHandler::handleEvent(Event *event)
 		{
 			break;
 		}
+    case Broadcast:
+    {
+      broadcaster.broadcastNannyAddress();
+      break;
+    }
 		case MusicPlayerEvent:
 		{
 			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&musicPlayerExecutor);

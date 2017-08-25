@@ -7,21 +7,16 @@
 
 #include "Broadcaster.hpp"
 
-Broadcaster::Broadcaster(InterfaceFinder &_finder)
-	: interfaceFinder(_finder)
+Broadcaster::Broadcaster()
 {
 	sock = socket (PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	interfaceFinder.init("eth0");
 }
 
 void Broadcaster::broadcastNannyAddress()
 {
-	  char buffer[1024];
 	  int status, yes=1;
 	  struct sockaddr_in sock_in;
-
-	  NannyBroadcasMessage *msg = reinterpret_cast<NannyBroadcasMessage *>(buffer);
-	  memcpy(msg->addr,interfaceFinder.getAddrString().c_str(),interfaceFinder.getAddrString().size());
-	  msg->port = 1234;
 
 	  memset(&sock_in, 0, sizeof(struct sockaddr_in));
 
@@ -32,8 +27,15 @@ void Broadcaster::broadcastNannyAddress()
 	  sock_in.sin_port = htons(12345); /* port number */
 	  sock_in.sin_family = PF_INET;
 
-	  const i32 messageLength = sizeof(NannyBroadcasMessage);
-	  if( sendto(sock, buffer, messageLength, 0, (struct sockaddr *)&sock_in, sizeof(struct sockaddr_in)) < messageLength)
+    json response;
+
+    response["port"] = 1234;
+    response["ip"] = interfaceFinder.getAddrString();
+
+    nannyLogInfo("Sending response " + response.dump());
+
+	  const i32 messageLength = response.dump().length();
+	  if( sendto(sock, response.dump().c_str(), messageLength, 0, (struct sockaddr *)&sock_in, sizeof(struct sockaddr_in)) < messageLength)
 		  nannyLogError("Failed when sending broadcast data");
 	  else
 		  nannyLogInfo("Broadcast to address " + interfaceFinder.getBroadcastAddrString() + " send successfully");

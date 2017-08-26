@@ -1,5 +1,7 @@
 project(nanny)
 
+add_definitions("-std=c++14 -Ofast -fPIC")
+
 include_directories("${PROJECT_SOURCE_DIR}")
 
 aux_source_directory("${PROJECT_SOURCE_DIR}" NANNY_SRC)

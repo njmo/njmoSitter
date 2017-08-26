@@ -90,18 +90,6 @@ void EventHandler::handleNanny(NannyRequest &nannyRequest)
 			event::EventQueue::getInstance().sendResponse(nannyRequest.senderId,nr);
 			break;
 		}
-		case NannyRequestType::NotifyWhenStartCrying:
-		{
-			nanny.handleUserRequestForVoiceRecorderNotify(nannyRequest.payload,nannyRequest.senderId);
-			//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
-			break;
-		}
-		case NannyRequestType::CaptureCamera:
-		{
-			nanny.handleUserRequestForCaptureCamera(nannyRequest.payload,nannyRequest.senderId);
-			//NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
-			break;
-		}
 	}
 }
 

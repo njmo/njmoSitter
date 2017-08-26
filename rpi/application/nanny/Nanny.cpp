@@ -41,7 +41,36 @@ void Nanny::create()
 void Nanny::notify(void * ev)
 {
   json* j = reinterpret_cast<json*>(ev);
-	nannyLogInfo("Nanny is notified");
+  int nannyType_present = j->count("nannyType");
+  int id_present = j->count("id");
+  nannyLogInfo("Received json : " + j->dump() ) ;
+
+  if( nannyType_present == 1 && id_present == 1)
+  {
+    int type = j->operator[]("nannyType").get<int>();
+    int id = j->operator[]("id").get<int>();
+	  nannyLogInfo("Nanny is notified by user " + std::to_string(id) + " request type: " + std::to_string(type));
+	  switch(static_cast<NannyRequestType>(type)) // == static_cast<u8>(NannyRequestType::Register))
+    {
+      case NannyRequestType::NotifyWhenStartCrying:
+      {
+//        handleUserRequestForVoiceRecorderNotify(nannyRequest.payload,nannyRequest.senderId);
+        //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+        break;
+      }
+      case NannyRequestType::CaptureCamera:
+      {
+        int cameraType_present = j->count("cameraType");
+        int fps_present = j->count("fps");
+        if ( cameraType_present == 1 && fps_present == 1 )
+          handleUserRequestForCaptureCamera({j->operator[]("cameraType").get<u8>(),
+                                             j->operator[]("fps").get<u8>()},
+                                            id);
+        //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+        break;
+      }
+    }
+  }
 
   delete j;
 }
@@ -112,28 +141,27 @@ void Nanny::handleUserRequestForVoiceRecorderNotify(void *req,u32 userId)
 		user.unRegisterForVoiceRecorderNotify();
 	}
 }
-void Nanny::handleUserRequestForCaptureCamera(void *req,u32 userId)
+void Nanny::handleUserRequestForCaptureCamera(const CameraRequest &cameraRequest,u32 userId)
 {
-	CameraRequest* r = reinterpret_cast<CameraRequest*>(req);
 	User &user = userStorage.find(userId)->second;
 	nannyLogInfo("Received CameraCapture message from user " + std::to_string(user.getId()));
-	if(r->cameraType == static_cast<u8>(CameraRequestType::registerForCamera))
+	if(cameraRequest.cameraType == static_cast<u8>(CameraRequestType::registerForCamera))
 	{
 		user.registerForCamera();
-		user.setFps(r->fps);
+		user.setFps(cameraRequest.fps);
 		isCameraCheckActive = true;
-		activeFps = r->fps;
+		activeFps = cameraRequest.fps;
 	}
-	else if(r->cameraType == static_cast<u8>(CameraRequestType::deregisterForCamera))
+	else if(cameraRequest.cameraType == static_cast<u8>(CameraRequestType::deregisterForCamera))
 	{
 		user.unRegisterForVoiceRecorderNotify();
 		user.setFps(0);
 		isCameraCheckActive = false;
 		activeFps = 0;
 	}
-	else if(r->cameraType == static_cast<u8>(CameraRequestType::changeFps))
+	else if(cameraRequest.cameraType == static_cast<u8>(CameraRequestType::changeFps))
 	{
-		user.setFps(r->fps);
+		user.setFps(cameraRequest.fps);
 	}
 }
 void Nanny::notifyAllRequestingUsers()

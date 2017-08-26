@@ -87,20 +87,10 @@ void PhoneThread::test()
       try
       {
         json *j = new json(json::parse(std::string(buffer)));
+        j->operator[]("id") = id;
 	      event::EventQueue::getInstance().sendResponse(nannyId,j);
       }catch(...){}
 
-      
-//      json *j = new json(std::string(buffer)_json);
-
-			if( i%2 == 0 )
-			{
-				sendNotifyCapture(0);
-				sendNotifyRequest();
-			}
-			else
-				sendNotifyCapture(1);
-			i++;
 			nannyLogInfo("User " + std::to_string(id) +" received " + std::to_string(readBytes) + "bytes of data ");
 		}
 		if(!requestList.empty()){

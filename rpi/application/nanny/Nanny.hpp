@@ -34,6 +34,7 @@ using nlohmann::json;
 #include <thread>
 #include <iostream>
 #include <map>
+#include <string>
 
 namespace app {
 
@@ -43,8 +44,6 @@ public:
 	void create();
 	void handleTimeout(Time&,u32&);
 	void handleUserRegistration(void*, u32);
-	void handleUserRequestForVoiceRecorderNotify(void*,u32);
-	void handleUserRequestForCaptureCamera(void*,u32);
 	void notify(void *);
 	virtual ~Nanny();
 private:
@@ -54,6 +53,9 @@ private:
 	void sendCameraCapture();
 	void notifyAllRequestingUsers();
   void sendBroadcastRequest();
+
+	void handleUserRequestForVoiceRecorderNotify(void*,u32);
+	void handleUserRequestForCaptureCamera(const CameraRequest &,u32);
 
 	volatile bool isVoiceCheckRequested;
 	volatile bool isCameraCheckActive;

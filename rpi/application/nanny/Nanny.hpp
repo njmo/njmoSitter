@@ -54,8 +54,8 @@ private:
 	void notifyAllRequestingUsers();
   void sendBroadcastRequest();
 
-	void handleUserRequestForVoiceRecorderNotify(void*,u32);
-	void handleUserRequestForCaptureCamera(const CameraRequest &,u32);
+	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32);
+	void handleUserRequestForCaptureCamera( const CameraRequest &, u32);
 
 	volatile bool isVoiceCheckRequested;
 	volatile bool isCameraCheckActive;

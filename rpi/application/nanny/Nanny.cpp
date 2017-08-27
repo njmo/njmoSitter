@@ -54,7 +54,8 @@ void Nanny::notify(void * ev)
     {
       case NannyRequestType::NotifyWhenStartCrying:
       {
-//        handleUserRequestForVoiceRecorderNotify(nannyRequest.payload,nannyRequest.senderId);
+        int notifyType_present = j->count("notifyType");
+        handleUserRequestForVoiceRecorderNotify({j->operator[]("notifyType").get<u8>()},id);
         //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
         break;
       }
@@ -125,13 +126,12 @@ void Nanny::handleUserRegistration(void* resp,u32 assignedId)
 
 	userStorage.emplace(assignedId,User(assignedId));
 }
-void Nanny::handleUserRequestForVoiceRecorderNotify(void *req,u32 userId)
+void Nanny::handleUserRequestForVoiceRecorderNotify(const NotifyRequest& notifyRequest,u32 userId)
 {
-	NotifyRequest* r = reinterpret_cast<NotifyRequest*>(req);
 	User &user = userStorage.find(userId)->second;
-	nannyLogInfo("Received VoiceRecorderNotify message " + std::to_string(user.getId()));
-	nannyLogInfo(std::to_string(r->notifyType));
-	if(r->notifyType == static_cast<u8>(NotifyRequestType::registerNotify))
+	nannyLogInfo("Received VoiceRecorderNotify message " + std::to_string(user.getId()) + " notify type " + 
+               std::to_string(notifyRequest.notifyType));
+	if(notifyRequest.notifyType == static_cast<u8>(NotifyRequestType::registerNotify))
 	{
 		user.registerForVoiceRecorderNotify();
 		isVoiceCheckRequested = true;

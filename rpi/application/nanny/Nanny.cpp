@@ -50,12 +50,13 @@ void Nanny::notify(void * ev)
     int type = j->operator[]("nannyType").get<int>();
     int id = j->operator[]("id").get<int>();
 	  nannyLogInfo("Nanny is notified by user " + std::to_string(id) + " request type: " + std::to_string(type));
-	  switch(static_cast<NannyRequestType>(type)) // == static_cast<u8>(NannyRequestType::Register))
+	  switch(static_cast<NannyRequestType>(type)) 
     {
       case NannyRequestType::NotifyWhenStartCrying:
       {
         int notifyType_present = j->count("notifyType");
         handleUserRequestForVoiceRecorderNotify({j->operator[]("notifyType").get<u8>()},id);
+        sendResponseJson(type,id);
         //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
         break;
       }
@@ -74,6 +75,26 @@ void Nanny::notify(void * ev)
   }
 
   delete j;
+}
+
+void Nanny::sendResponseJson(u8 type,u8 id)
+{
+	event::Event* internalResponseEvent= reinterpret_cast<event::Event*>(allocate(5));
+	internalResponseEvent->type = event::EventType::InternalResponse;
+  internalResponseEvent->senderId = id;
+
+	NannyResponse* commandResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
+  json j;
+
+  j["requestType"] = type;
+  j["statusCode"] = 1;
+
+	commandResponse->size = j.dump().size();
+  nannyLogInfo("Message " + j.dump() + " message size " + std::to_string(j.dump().size()));
+	memcpy(commandResponse->data,j.dump().c_str(),commandResponse->size);
+
+  *reinterpret_cast<u32*>(internalResponseEvent->payload) = (u32)commandResponse;
+	event::EventQueue::getInstance().push(internalResponseEvent);
 }
 
 void Nanny::sendBroadcastRequest()
@@ -166,8 +187,15 @@ void Nanny::handleUserRequestForCaptureCamera(const CameraRequest &cameraRequest
 }
 void Nanny::notifyAllRequestingUsers()
 {
-	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,TestData>());
-	vrResponse->size = 15;
+	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
+
+  json j;
+  j["notifyType"] = 0;
+  j["status"] = 1;
+
+	vrResponse->size = j.dump().size();
+  nannyLogInfo("Message " + j.dump() + " message size " + std::to_string(j.dump().size()));
+	memcpy(vrResponse->data,j.dump().c_str(),vrResponse->size);
 	std::map<u32,User>::iterator it;
 	for ( it = userStorage.begin(); it != userStorage.end(); it++ )
 	{
@@ -180,7 +208,6 @@ void Nanny::notifyAllRequestingUsers()
 			event::EventQueue::getInstance().sendResponse(user.getId(),vrResponse);
 		}
 	}
-	delete vrResponse;
 }
 void Nanny::sendCameraCapture()
 {
@@ -192,6 +219,8 @@ void Nanny::sendCameraCapture()
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
 	vrResponse->size = response->size;
 
+  json j;
+  
 	memcpy(vrResponse->data,response->frame,response->size);
   freed(response);
 

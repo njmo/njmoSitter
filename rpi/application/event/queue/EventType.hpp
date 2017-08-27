@@ -20,6 +20,7 @@ enum EventType
 	CameraCaptureFrame,
 	DisableQueueEvent,
 	NannyQuery,
+  InternalResponse,
 	TestEvent = 0
 };
 

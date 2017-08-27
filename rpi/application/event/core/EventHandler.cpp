@@ -55,6 +55,11 @@ void EventHandler::handleEvent(Event *event)
 			handleNanny(*reinterpret_cast<NannyRequest*>(event));
 			break;
 		}
+    case InternalResponse:
+    {
+			event::EventQueue::getInstance().sendResponse(event->senderId,(void*)*reinterpret_cast<u32 *>(event->payload));
+      break; 
+    }
 		default:
 		{
 			break;

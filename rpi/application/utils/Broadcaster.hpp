@@ -28,6 +28,8 @@ public:
 	virtual ~Broadcaster();
 private:
 	int sock;
+  struct sockaddr_in sock_in;
+  json response;
 	InterfaceFinder interfaceFinder;
 };
 

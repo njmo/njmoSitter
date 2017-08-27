@@ -53,6 +53,7 @@ private:
 	void sendCameraCapture();
 	void notifyAllRequestingUsers();
   void sendBroadcastRequest();
+  void sendResponseJson( u8,  u8);
 
 	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32);
 	void handleUserRequestForCaptureCamera( const CameraRequest &, u32);

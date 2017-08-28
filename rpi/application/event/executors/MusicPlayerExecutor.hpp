@@ -23,6 +23,7 @@
 
 #include <event/event_data/MusicPlayerData.hpp>
 #include <device/MusicPlayer.hpp>
+#include <device/Microphone.hpp>
 
 // downloaded from https://github.com/nlohmann/json
 #include <utils/json.hpp>
@@ -46,6 +47,8 @@ private:
   }
 
 	device::MusicPlayer musicPlayer;
+  device::Microphone microphone;
+
 	std::string currentlyPlayingSong;
   std::vector<std::string> aviavableSongs;
 };

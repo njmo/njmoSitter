@@ -20,6 +20,7 @@ MusicPlayer::MusicPlayer()
 void MusicPlayer::initialize()
 {
   u32 pcm;
+  snd_pcm_hw_params_t *params;
   u32 rate = 44100;
   const i32 channels = 2;
   if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE,
@@ -73,6 +74,7 @@ void MusicPlayer::initialize()
 
   buff_size = frames * channels * 2 /* 2 -> sample size */;
 
+  //snd_pcm_hw_params_free (params);
   state = configured;
 //  play("/home/pi/songs/wogrodku.wav");
 }

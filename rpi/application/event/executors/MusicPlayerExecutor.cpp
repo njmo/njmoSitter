@@ -13,6 +13,7 @@ namespace executor {
 MusicPlayerExecutor::MusicPlayerExecutor()
 {
   musicPlayer.initialize();
+  microphone.initialize();
   readSongs();
   json j(aviavableSongs);
   nannyLogInfo(j.dump());

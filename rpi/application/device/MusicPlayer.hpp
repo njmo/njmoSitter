@@ -44,7 +44,6 @@ public:
 private:
   u32 buff_size;
   snd_pcm_t *pcm_handle;
-  snd_pcm_hw_params_t *params;
 	PlayerState state;
   u64 frames;
 };

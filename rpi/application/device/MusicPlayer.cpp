@@ -22,7 +22,6 @@ void MusicPlayer::initialize()
   u32 pcm;
   u32 rate = 44100;
   const i32 channels = 2;
-  u64 frames;
   if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE,
             SND_PCM_STREAM_PLAYBACK, 0) < 0) 
   {
@@ -30,6 +29,7 @@ void MusicPlayer::initialize()
     state = failedOnConfiguration; 
     return ;
   }
+
   snd_pcm_hw_params_alloca(&params);
   snd_pcm_hw_params_any(pcm_handle, params);
   if (pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
@@ -48,7 +48,6 @@ void MusicPlayer::initialize()
     return ;
   }
 
-  snd_pcm_hw_params_any(pcm_handle, params);
   if (pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels) < 0) 
   {
     nannyLogError("ERROR: Can't set channels number. " + snd_strerror(pcm));
@@ -56,7 +55,7 @@ void MusicPlayer::initialize()
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_rate_near(pcm_handle, params, &rate, 0) < 0) 
+  if (pcm = snd_pcm_hw_params_set_rate(pcm_handle, params, rate, 0) < 0) 
   {
     nannyLogError("ERROR: Can't set rate." + snd_strerror(pcm));
     state = failedOnConfiguration; 
@@ -75,6 +74,7 @@ void MusicPlayer::initialize()
   buff_size = frames * channels * 2 /* 2 -> sample size */;
 
   state = configured;
+//  play("/home/pi/songs/wogrodku.wav");
 }
 
 void MusicPlayer::stop()
@@ -84,7 +84,31 @@ void MusicPlayer::stop()
 
 void MusicPlayer::play(std::string songName)
 {
+  SF_INFO sfinfo;
+  SNDFILE *infile = NULL;
+  int pcmrc,readcount;
+  short* buf = NULL;
+  infile = sf_open(songName.c_str(), SFM_READ, &sfinfo);
+
   nannyLogInfo("Starting to play : " + songName); 
+
+  buf = (short*)malloc(buff_size);
+  while ((readcount = sf_readf_short(infile, buf, frames))>0) {
+      pcmrc = snd_pcm_writei(pcm_handle, buf, readcount);
+      if (pcmrc == -EPIPE) {
+          fprintf(stderr, "Underrun!\n");
+          snd_pcm_prepare(pcm_handle);
+      }
+      else if (pcmrc < 0) {
+          fprintf(stderr, "Error writing to PCM device: %s\n", snd_strerror(pcmrc));
+      }
+      else if (pcmrc != readcount) {
+          fprintf(stderr,"PCM write difffers from PCM read.\n");
+      }
+
+  }
+  snd_pcm_drain(pcm_handle);
+  free(buf);
 }
 
 PlayerState MusicPlayer::getState()
@@ -93,6 +117,7 @@ PlayerState MusicPlayer::getState()
 }
 
 MusicPlayer::~MusicPlayer() {
+  snd_pcm_close(pcm_handle);
 	// TODO Auto-generated destructor stub
 }
 

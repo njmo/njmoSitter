@@ -12,9 +12,11 @@
 #include <utils/Logger/Logger.hpp>
 
 #include <alsa/asoundlib.h>
+#include <sndfile.h>
 
 namespace device {
-#define PCM_DEVICE "default"
+#define PCM_DEVICE "hw:1,0"
+
 enum PlayerState
 {
 	playing,
@@ -44,6 +46,7 @@ private:
   snd_pcm_t *pcm_handle;
   snd_pcm_hw_params_t *params;
 	PlayerState state;
+  u64 frames;
 };
 
 } /* namespace device */

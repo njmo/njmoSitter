@@ -16,6 +16,7 @@ enum NannyRequestType
 	NotifyWhenStartCrying,
 	CaptureCamera,
 	CaptureVoice,
+  MusicPlayer,
 	ControllEngine
 };
 

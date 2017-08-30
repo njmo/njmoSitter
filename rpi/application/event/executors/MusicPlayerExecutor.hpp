@@ -20,8 +20,10 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <inc/Messages.hpp>
 
 #include <event/event_data/MusicPlayerData.hpp>
+#include <interface/response/MusicPlayerResponse.hpp>
 #include <device/MusicPlayer.hpp>
 
 // downloaded from https://github.com/nlohmann/json

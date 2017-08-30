@@ -11,8 +11,9 @@
 
 enum MusicPlayerRequestType
 {
-	playMusic,
+	playMusic=0,
 	stopMusic,
+  getSongList,
 	changeMusic,
 	reloadMusic,
 	pauseMusic,

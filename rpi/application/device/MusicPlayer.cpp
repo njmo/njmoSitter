@@ -11,7 +11,9 @@ namespace device {
 
 MusicPlayer::MusicPlayer()
 	: state(unconfigured),
-    buff_size(0)
+    buff_size(0),
+    activeFile(nullptr),
+		std::thread(&MusicPlayer::mainLoop, this)
 {
 	// TODO Auto-generated constructor stub
 
@@ -81,38 +83,65 @@ void MusicPlayer::initialize()
 
 void MusicPlayer::stop()
 {
-
+  state = stopped;
+  snd_pcm_drop(pcm_handle);
+  sf_close(activeFile);
+  activeFile = nullptr;
 }
 
 void MusicPlayer::play(std::string songName)
 {
+  if(state == paused && activeFile != nullptr)
+  {
+    state = playing;
+    snd_pcm_pause(pcm_handle,0);
+    return ;
+  }
+ 
   SF_INFO sfinfo;
-  SNDFILE *infile = NULL;
-  int pcmrc,readcount;
-  short* buf = NULL;
-  infile = sf_open(songName.c_str(), SFM_READ, &sfinfo);
+
+  state = changingMusic;
+  activeFile = sf_open(songName.c_str(), SFM_READ, &sfinfo);
+  state = playing;
 
   nannyLogInfo("Starting to play : " + songName); 
-
-  buf = (short*)malloc(buff_size);
-  while ((readcount = sf_readf_short(infile, buf, frames))>0) {
-      pcmrc = snd_pcm_writei(pcm_handle, buf, readcount);
-      if (pcmrc == -EPIPE) {
-          fprintf(stderr, "Underrun!\n");
-          snd_pcm_prepare(pcm_handle);
-      }
-      else if (pcmrc < 0) {
-          fprintf(stderr, "Error writing to PCM device: %s\n", snd_strerror(pcmrc));
-      }
-      else if (pcmrc != readcount) {
-          fprintf(stderr,"PCM write difffers from PCM read.\n");
-      }
-
-  }
-  snd_pcm_drain(pcm_handle);
-  free(buf);
 }
 
+void MusicPlayer::pause()
+{
+  state = paused;
+  snd_pcm_pause(pcm_handle,1);
+}
+
+void MusicPlayer::mainLoop()
+{
+  int pcmrc,readcount;
+  short* buf = NULL;
+  buf = (short*)malloc(buff_size);
+
+  state = unconfigured;
+  while(1)
+  {
+    while(state != playing)
+      ;
+    if((readcount = sf_readf_short(activeFile, buf, frames))>0) {
+        pcmrc = snd_pcm_writei(pcm_handle, buf, readcount);
+        if (pcmrc == -EPIPE) {
+            fprintf(stderr, "Underrun!\n");
+            snd_pcm_prepare(pcm_handle);
+        }
+        else if (pcmrc < 0) {
+            fprintf(stderr, "Error writing to PCM device: %s\n", snd_strerror(pcmrc));
+        }
+        else if (pcmrc != readcount) {
+            fprintf(stderr,"PCM write difffers from PCM read.\n");
+        }
+    }
+    else
+      stop();
+  } 
+  delete buf;
+}
 PlayerState MusicPlayer::getState()
 {
 	return state;

@@ -71,6 +71,21 @@ void Nanny::notify(void * ev)
         //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
         break;
       }
+      case NannyRequestType::MusicPlayer:
+      {
+        int type_present = j->count("type");
+        int songId_present = j->count("songId");
+        if( type_present == 1 )
+        {
+          u8 songId = 0xff;
+          if(songId_present == 1 ) 
+            songId = j->operator[]("songId").get<u8>();
+          handleUserRequesstForMusicPlayer({j->operator[]("type").get<MusicPlayerRequestType>(),
+                                            songId},
+                                            id);
+        }
+        break;
+      } 
     }
   }
 
@@ -167,6 +182,20 @@ void Nanny::handleUserRequestForVoiceRecorderNotify(const NotifyRequest& notifyR
 		user.unRegisterForVoiceRecorderNotify();
 	}
 }
+void Nanny::handleUserRequesstForMusicPlayer(const MusicPlayerData &musicPlayerRequest,u32 userId)
+{
+	User &user = userStorage.find(userId)->second;
+  event::Event* mpEvent = reinterpret_cast<event::Event*>(allocate<MusicPlayerData>());
+  mpEvent->type = event::EventType::MusicPlayerEvent;
+  MusicPlayerData *mp_data = reinterpret_cast<MusicPlayerData*>(mpEvent->payload);
+  memcpy(mp_data,&musicPlayerRequest,sizeof(MusicPlayerData));
+  if(musicPlayerRequest.type == getSongList)
+  {
+
+  }
+  else
+    event::EventQueue::getInstance().push(mpEvent);
+}
 void Nanny::handleUserRequestForCaptureCamera(const CameraRequest &cameraRequest,u32 userId)
 {
 	User &user = userStorage.find(userId)->second;
@@ -228,8 +257,6 @@ void Nanny::sendCameraCapture()
 
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
 	vrResponse->size = response->size;
-
-  json j;
   
 	memcpy(vrResponse->data,response->frame,response->size);
   freed(response);

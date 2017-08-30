@@ -13,6 +13,7 @@
 #include <interface/response/CameraCaptureResponse.hpp>
 #include <interface/data/CameraData.hpp>
 #include <interface/data/MicrophoneData.hpp>
+#include <event/event_data/MusicPlayerData.hpp>
 
 #include <interface/message/RegisterUser.hpp>
 #include <interface/message/NannyRequest.hpp>
@@ -58,6 +59,7 @@ private:
 
 	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32);
 	void handleUserRequestForCaptureCamera( const CameraRequest &, u32);
+  void handleUserRequesstForMusicPlayer(const MusicPlayerData &,u32);
 
 	volatile bool isVoiceCheckRequested;
 	volatile bool isCameraCheckActive;

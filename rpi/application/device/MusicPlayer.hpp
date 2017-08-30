@@ -13,20 +13,23 @@
 
 #include <alsa/asoundlib.h>
 #include <sndfile.h>
+#include <thread>
 
 namespace device {
 #define PCM_DEVICE "hw:1,0"
 
 enum PlayerState
 {
-	playing,
+	playing=0,
+  paused,
 	stopped,
 	configured,
   failedOnConfiguration,
-	unconfigured
+	unconfigured,
+  changingMusic
 };
 
-class MusicPlayer
+class MusicPlayer : public std::thread
 {
 public:
 	MusicPlayer();
@@ -35,7 +38,9 @@ public:
 	void stop();
 	void play(std::string);
 
-  void pause(){}
+  void mainLoop();
+
+  void pause();
   void resume(){}
 
 	PlayerState getState();
@@ -44,7 +49,8 @@ public:
 private:
   u32 buff_size;
   snd_pcm_t *pcm_handle;
-	PlayerState state;
+  volatile PlayerState state;
+  SNDFILE *activeFile;
   u64 frames;
 };
 

@@ -14,8 +14,6 @@ MusicPlayerExecutor::MusicPlayerExecutor()
 {
   musicPlayer.initialize();
   readSongs();
-  json j(aviavableSongs);
-  nannyLogInfo(j.dump());
 }
 
 MusicPlayerExecutor::~MusicPlayerExecutor() 
@@ -52,24 +50,43 @@ void MusicPlayerExecutor::readSongs()
 
 Response* MusicPlayerExecutor::execute(void *_data)
 {
+	Response* response = reinterpret_cast<Response *>(allocate<MusicPlayerResponse>());
+	response->status = Reponse_Ok;
+	response->type = WithoutResponse;
+
 	MusicPlayerData *data = reinterpret_cast<MusicPlayerData*>(_data);
+
 	switch(data->type)
 	{
 		case stopMusic:
+    {
 			nannyLogInfo("stoping Music");
-			//musicPlayer.stop();
+			musicPlayer.stop();
 			break;
+    }
+		case pauseMusic:
+    {
+			nannyLogInfo("pause Music");
+			musicPlayer.pause();
+			break;
+    }
     case playMusic:
     {
       musicPlayer.play("/home/pi/songs/" + aviavableSongs.at(data->songId));
       break;
     }
+    case getSongList:
+    {
+      MusicPlayerResponse *resp = reinterpret_cast<MusicPlayerResponse*>(response->data);
+      response->status = Reponse_Ok;
+      response->type = WithReponse;
+      json j(aviavableSongs);
+      nannyLogInfo(j.dump());
+      memcpy(resp->songList,j.dump().c_str(),j.dump().size());
+    }
 		default:
 			break;
 	}
-	Response * response =  new Response;
-	response->status = Reponse_Ok;
-	response->type = WithoutResponse;
 	return response;
 }
 

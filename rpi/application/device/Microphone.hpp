@@ -6,6 +6,7 @@
 #include <alsa/asoundlib.h>
 
 #include <math.h>
+#include <thread>
 
 #define PCM_DEVICE_CAPTURE "plughw:CARD=II,DEV=0"
 #define BUFFER_SIZE 1024
@@ -16,21 +17,28 @@ namespace device {
 enum MicrophoneState 
 {
 	recording,
+  notRecording,
 	configuredm,
   failedOnConfigurationm,
 	unconfiguredm
 };
 
-class Microphone
+class Microphone : public std::thread
 {
 public:
   Microphone();
+  void detectCry();
+  bool isCrying();
+  void startRecording();
+  void stopRecording();
 	void initialize();
   virtual ~Microphone();
 
 private:
   double rms(short *buffer);
-  MicrophoneState state;
+  volatile bool isBabyCrying;
+  volatile  MicrophoneState state;
+  volatile u64 numberOfLoudFrames;
   u64 frames;
   snd_pcm_t *pcm_handle;
 };

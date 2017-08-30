@@ -10,8 +10,8 @@
 namespace event {
 namespace executor {
 
-CameraCaptureExecutor::CameraCaptureExecutor() {
-	// TODO Auto-generated constructor stub
+CameraCaptureExecutor::CameraCaptureExecutor() 
+{
 
 }
 

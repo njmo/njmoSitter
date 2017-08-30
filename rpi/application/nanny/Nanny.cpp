@@ -155,6 +155,11 @@ void Nanny::handleUserRequestForVoiceRecorderNotify(const NotifyRequest& notifyR
 	if(notifyRequest.notifyType == static_cast<u8>(NotifyRequestType::registerNotify))
 	{
 		user.registerForVoiceRecorderNotify();
+    event::Event* startRecording = reinterpret_cast<event::Event*>(allocate<MicrophoneData>());
+    startRecording->type = event::EventType::VoiceRecorderEvent;
+    MicrophoneData *mc_data = reinterpret_cast<MicrophoneData*>(startRecording->payload);
+    mc_data->type = 0;
+    event::EventQueue::getInstance().pushImportant(startRecording);
 		isVoiceCheckRequested = true;
 	}
 	else
@@ -208,6 +213,11 @@ void Nanny::notifyAllRequestingUsers()
 			event::EventQueue::getInstance().sendResponse(user.getId(),vrResponse);
 		}
 	}
+  event::Event* stopRecording = reinterpret_cast<event::Event*>(allocate<MicrophoneData>());
+  stopRecording->type = event::EventType::VoiceRecorderEvent;
+  MicrophoneData *mc_data = reinterpret_cast<MicrophoneData*>(stopRecording->payload);
+  mc_data->type = 1;
+  event::EventQueue::getInstance().pushImportant(stopRecording);
 }
 void Nanny::sendCameraCapture()
 {
@@ -240,9 +250,10 @@ void Nanny::sendCameraCapture()
 }
 bool Nanny::sendVoiceRecorderCheck()
 {
-	event::Event* checkVR = reinterpret_cast<event::Event*>(allocate<TestData>());
-	checkVR->senderId = NANNY_ID;
+	event::Event* checkVR = reinterpret_cast<event::Event*>(allocate<MicrophoneData>());
 	checkVR->type = event::EventType::VoiceRecorderEvent;
+  MicrophoneData *mc_data = reinterpret_cast<MicrophoneData*>(checkVR->payload);
+  mc_data->type = 2;
 
 	VideoRecorderResponse * response = reinterpret_cast<VideoRecorderResponse *>(event::EventQueue::getInstance().pushImportantAndWaitForResponse(checkVR));
 	if( response->state == VideoRecorderState::Loud )

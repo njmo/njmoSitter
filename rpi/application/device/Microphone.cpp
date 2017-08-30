@@ -3,6 +3,9 @@
 namespace device {
 
 Microphone::Microphone()
+  : isBabyCrying(false),
+		std::thread(&Microphone::detectCry, this),
+    numberOfLoudFrames(0)
 {
 
 }
@@ -63,19 +66,26 @@ void Microphone::initialize()
   }
   snd_pcm_hw_params_get_period_size(params, &frames, 0);
 
+  state = configuredm;
+}
+void Microphone::detectCry()
+{
+  state = unconfiguredm;
+  while(state!=configuredm)
+    ;
   snd_pcm_prepare (pcm_handle);
 
-/*
-  short* buf = NULL;
   float result = 0.0f;
-  buf = (short*)malloc(BUFFER_SIZE*2);
-  while(1)
-  {
-    short buffer[512];
-    if (snd_pcm_readi (pcm_handle, buffer, 256) == 256)
+  int size = 512;
+  short buffer[size];
+  numberOfLoudFrames = 0;
+  while(1){
+    while(state != recording)
+      ;
+    if (snd_pcm_readi (pcm_handle, buffer, size/2) == size/2)
     {
         // Compute the maximum peak value
-        for (int i = 0; i < 512; ++i)
+        for (int i = 0; i < size; ++i)
         {
             // Substitute better algorithm here if needed
             float s = buffer[i] / 32768.0f;
@@ -84,22 +94,25 @@ void Microphone::initialize()
         }
     } 
     if(result > 0.005)
-      nannyLogInfo("dB " + std::to_string(result));
+      numberOfLoudFrames++;
     result = 0;
-  }*/
-}
-
-double Microphone::rms(short *buffer)
-{
-  int i;
-  long int square_sum = 0.0;
-  for(i=0; i<BUFFER_SIZE/2; i++) {
-    square_sum += (buffer[i] * buffer[i]);
   }
-
-  double result = sqrt(square_sum/BUFFER_SIZE/2);
-  return result;
 }
+void Microphone::startRecording()
+{
+  state = recording;
+}
+void Microphone::stopRecording()
+{
+  state = notRecording;
+}
+bool Microphone::isCrying()
+{
+  bool isCryin = numberOfLoudFrames > 50;
+  numberOfLoudFrames = 0;
+  return isCryin;
+}
+
 Microphone::~Microphone()
 {
 

@@ -12,6 +12,7 @@
 #include <interface/response/VideoRecorderResponse.hpp>
 #include <interface/response/CameraCaptureResponse.hpp>
 #include <interface/data/CameraData.hpp>
+#include <interface/data/MicrophoneData.hpp>
 
 #include <interface/message/RegisterUser.hpp>
 #include <interface/message/NannyRequest.hpp>

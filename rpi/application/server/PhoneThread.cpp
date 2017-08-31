@@ -75,7 +75,7 @@ void PhoneThread::test()
 		ioctl(socket, FIONREAD, &count);
 		if( count > 0 )
 		{
-			i8 buffer[1024];
+			i8 buffer[1024] = {};
 			int readBytes;
 			readBytes = read(socket,buffer,1024);
 			if(readBytes <= 0 )

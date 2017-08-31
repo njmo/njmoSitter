@@ -9,7 +9,7 @@
 #define APPLICATION_INTERFACE_RESPONSE_CAMERACAPTURERESPONSE_HPP_
 #include <inc/defines.hpp>
 
-#define MAX_SIZE (1920*3) * (1080*3)
+#define MAX_SIZE (1024 * 1024 * 3)
 
 struct CameraCaptureResponse
 {

@@ -20,6 +20,7 @@ Motor::Motor()
 }
 void Motor::start(u8 speed)
 {
+  gpioPWM(12,speed);
   nannyLogInfo("Starting motor with speed " + std::to_string(speed));
 }
 void Motor::stop()

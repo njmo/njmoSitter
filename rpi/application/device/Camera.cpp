@@ -24,7 +24,10 @@ void Camera::getFrame(CameraCaptureResponse &response)
 	Mat frame,send;
 	int jpegqual = 80;
 	std::vector < uchar > encoded;
-	cap >> frame;
+  do
+  {
+	  cap >> frame;
+  }while( frame.size().width == 0 );
 	resize(frame, send, Size(800, 600), 0, 0, INTER_LINEAR);
 	std::vector < int > compression_params;
 	compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);

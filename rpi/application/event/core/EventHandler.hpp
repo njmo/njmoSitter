@@ -16,6 +16,7 @@
 #include <event/executors/MusicPlayerExecutor.hpp>
 #include <event/executors/VoiceRecorderExecutor.hpp>
 #include <event/executors/CameraCaptureExecutor.hpp>
+#include <event/executors/MotorExecutor.hpp>
 #include <utils/Broadcaster.hpp>
 
 #include <nanny/Nanny.hpp>
@@ -33,6 +34,8 @@ private:
 	executor::MusicPlayerExecutor musicPlayerExecutor;
 	executor::CameraCaptureExecutor cameraCaptureExecutor;
 	executor::VoiceRecorderExecutor voiceRecorderExecutor;
+	executor::MotorExecutor motorExecutor;
+
   Broadcaster broadcaster;
 	app::Nanny &nanny;
 };

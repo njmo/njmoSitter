@@ -18,6 +18,7 @@ enum EventType
 	VoiceRecorderEvent,
   Broadcast,
 	CameraCaptureFrame,
+  MotorEvent,
 	DisableQueueEvent,
 	NannyQuery,
   InternalResponse,

@@ -71,6 +71,16 @@ void Nanny::notify(void * ev)
         //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
         break;
       }
+      case NannyRequestType::ControllMotor:
+      {
+        int type_present = j->count("type");
+        int motorSpeed_present = j->count("motorSpeed");
+        if( type_present == 1)
+          handleMotorRequest({j->operator[]("type").get<MotorRequestType>(),
+                              j->operator[]("motorSpeed").get<u8>()});
+
+        break;
+      }
       case NannyRequestType::MusicPlayer:
       {
         int type_present = j->count("type");
@@ -149,6 +159,15 @@ void Nanny::handleTimeout(Time &time,u32 &duration)
 				timeVoiceLoud = 0;
 		}
 	}
+}
+
+void Nanny::handleMotorRequest(const MotorRequest &motorRequest)
+{
+  event::Event* motorEvent = reinterpret_cast<event::Event*>(allocate<MotorRequest>());
+  motorEvent->type = event::EventType::MotorEvent;
+  MotorRequest *mr_data = reinterpret_cast<MotorRequest*>(motorEvent->payload);
+  memcpy(mr_data,&motorRequest,sizeof(MotorRequest));
+  event::EventQueue::getInstance().push(motorEvent);
 }
 
 void Nanny::handleUserRegistration(void* resp,u32 assignedId)
@@ -253,7 +272,7 @@ void Nanny::sendCameraCapture()
 	event::Event* checkVR = reinterpret_cast<event::Event*>(allocate<TestData>());
 	checkVR->senderId = NANNY_ID;
 	checkVR->type = event::EventType::CameraCaptureFrame;
-	CameraCaptureResponse * response = reinterpret_cast<CameraCaptureResponse *>(event::EventQueue::getInstance().pushImportantAndWaitForResponse(checkVR));
+	CameraCaptureResponse * response = reinterpret_cast<CameraCaptureResponse *>(event::EventQueue::getInstance().pushAndWaitForResponse(checkVR));
 
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocate((response->size*3) + sizeof(NannyResponse)));
 	vrResponse->size = response->size;

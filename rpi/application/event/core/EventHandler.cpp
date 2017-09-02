@@ -30,6 +30,11 @@ void EventHandler::handleEvent(Event *event)
 		{
 			break;
 		}
+    case MotorEvent:
+    {
+			eventExecutor = reinterpret_cast<executor::EventExecutor *>(&motorExecutor);
+      break;
+    }
     case Broadcast:
     {
       broadcaster.broadcastNannyAddress();

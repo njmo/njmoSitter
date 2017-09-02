@@ -17,7 +17,7 @@ enum NannyRequestType
 	CaptureCamera,
 	CaptureVoice,
   MusicPlayer,
-	ControllEngine
+	ControllMotor
 };
 
 struct NannyRequest

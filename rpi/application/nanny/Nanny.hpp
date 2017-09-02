@@ -19,6 +19,7 @@
 #include <interface/message/NannyRequest.hpp>
 #include <interface/message/NotifyRequest.hpp>
 #include <interface/message/CameraRequest.hpp>
+#include <interface/message/MotorRequest.hpp>
 
 #include <event/queue/EventQueue.hpp>
 #include <event/responses/TestResponse.hpp>
@@ -60,6 +61,7 @@ private:
 	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32);
 	void handleUserRequestForCaptureCamera( const CameraRequest &, u32);
   void handleUserRequesstForMusicPlayer(const MusicPlayerData &,u32);
+  void handleMotorRequest(const MotorRequest &);
 
 	volatile bool isVoiceCheckRequested;
 	volatile bool isCameraCheckActive;

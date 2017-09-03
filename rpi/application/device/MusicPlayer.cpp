@@ -79,8 +79,64 @@ void MusicPlayer::initialize()
   //snd_pcm_hw_params_free (params);
   state = configured;
 //  play("/home/pi/songs/wogrodku.wav");
+//  MIXER INITIALIZATION
+  if( pcm = snd_mixer_open(&mix_handle, 0) < 0)
+  {
+    nannyLogError("ERROR: Can't open mixer. : " + snd_strerror(pcm));
+    state = failedOnConfiguration;
+    return ;
+  }
+
+  if( pcm = snd_mixer_attach(mix_handle, PCM_DEVICE) < 0)
+  {
+    nannyLogError("ERROR: Can't attach mixer. : " + snd_strerror(pcm));
+    state = failedOnConfiguration;
+    return ;
+  }
+
+  if( pcm = snd_mixer_selem_register(mix_handle, NULL, NULL) < 0)
+  {
+    nannyLogError("ERROR: Can't register mixer. : " + snd_strerror(pcm));
+    state = failedOnConfiguration;
+    return ;
+  }
+
+  if( pcm = snd_mixer_load(mix_handle) < 0)
+  {
+    nannyLogError("ERROR: Can't load mixer. : " + snd_strerror(pcm));
+    state = failedOnConfiguration;
+    return ;
+  }
+
+  snd_mixer_selem_id_alloca(&mix_sid); 
+  if( mix_sid == NULL )
+  {
+    nannyLogError("ERROR: Can't alloc selem");
+    state = failedOnConfiguration;
+    return ;
+  }
+  snd_mixer_selem_id_set_index(mix_sid, 0);
+  snd_mixer_selem_id_set_name(mix_sid, "Speaker");
+
+  mix_elem = snd_mixer_find_selem(mix_handle, mix_sid);
+  if(mix_elem == NULL )
+  {
+    nannyLogError("ERROR: Can't find selem");
+    state = failedOnConfiguration;
+    return ;
+  }
+
 }
 
+void MusicPlayer::changeVolume(u8 volume)
+{
+  u32 v;
+  if (v = snd_mixer_selem_set_playback_volume_all(mix_elem,volume) < 0)
+  {
+    nannyLogError("Error during volume change! " + snd_strerror(v));
+    return;
+  }
+}
 void MusicPlayer::stop()
 {
   state = stopped;

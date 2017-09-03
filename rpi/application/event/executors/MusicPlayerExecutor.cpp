@@ -64,6 +64,12 @@ Response* MusicPlayerExecutor::execute(void *_data)
 			musicPlayer.stop();
 			break;
     }
+    case changeVolume:
+    {
+      nannyLogInfo("Changing volume");
+      musicPlayer.changeVolume(data->songId);
+      break;
+    }
 		case pauseMusic:
     {
 			nannyLogInfo("pause Music");

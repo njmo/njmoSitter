@@ -12,11 +12,13 @@
 #include <utils/Logger/Logger.hpp>
 
 #include <alsa/asoundlib.h>
+#include <alsa/mixer.h>
+
 #include <sndfile.h>
 #include <thread>
 
 namespace device {
-#define PCM_DEVICE "hw:1,0"
+#define PCM_DEVICE "hw:CARD=II"
 
 enum PlayerState
 {
@@ -37,6 +39,7 @@ public:
 
 	void stop();
 	void play(std::string);
+  void changeVolume(u8);
 
   void mainLoop();
 
@@ -52,6 +55,10 @@ private:
   volatile PlayerState state;
   SNDFILE *activeFile;
   u64 frames;
+
+  snd_mixer_t *mix_handle;
+  snd_mixer_selem_id_t *mix_sid;
+  snd_mixer_elem_t *mix_elem;
 };
 
 } /* namespace device */

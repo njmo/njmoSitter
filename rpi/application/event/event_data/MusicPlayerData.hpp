@@ -17,7 +17,8 @@ enum MusicPlayerRequestType
 	changeMusic,
 	reloadMusic,
 	pauseMusic,
-	unPauseMusic
+	unPauseMusic,
+  changeVolume
 };
 
 struct MusicPlayerData

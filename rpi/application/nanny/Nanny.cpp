@@ -42,6 +42,7 @@ void Nanny::notify(void * ev)
 {
   json* j = reinterpret_cast<json*>(ev);
   int nannyType_present = j->count("nannyType");
+  bool is_chained_event = (j->count("isChainedEvent") == 1 );
   int id_present = j->count("id");
   nannyLogInfo("Received json : " + j->dump() ) ;
 
@@ -55,9 +56,15 @@ void Nanny::notify(void * ev)
       case NannyRequestType::NotifyWhenStartCrying:
       {
         int notifyType_present = j->count("notifyType");
-        handleUserRequestForVoiceRecorderNotify({j->operator[]("notifyType").get<u8>()},id);
-        sendResponseJson(type,id);
+        handleUserRequestForVoiceRecorderNotify({j->operator[]("notifyType").get<u8>()},id,is_chained_event);
+        //sendResponseJson(type,id);
         //NannyResponse* nr = reinterpret_cast<NannyResponse*>(allocateNanny<NoResponseData,NannyResponse>());
+        break;
+      }
+      case NannyRequestType::ChainedEvent:
+      {
+        nannyLogInfo("Chained event catched!");
+        chainEventController.storeChain(j);
         break;
       }
       case NannyRequestType::CaptureCamera:
@@ -140,7 +147,7 @@ void Nanny::handleTimeout(Time &time,u32 &duration)
 	{
 		if((time.getSecond() % 1 )== 0)
 		{
-      sendBroadcastRequest();
+      //sendBroadcastRequest();
 			if( isCameraCheckActive )
 			{
 				nannyLogInfo("Sending with fps: " + std::to_string(sendedFps));
@@ -181,14 +188,18 @@ void Nanny::handleUserRegistration(void* resp,u32 assignedId)
 
 	userStorage.emplace(assignedId,User(assignedId));
 }
-void Nanny::handleUserRequestForVoiceRecorderNotify(const NotifyRequest& notifyRequest,u32 userId)
+void Nanny::handleUserRequestForVoiceRecorderNotify(const NotifyRequest& notifyRequest,u32 userId, bool isChainEvent)
 {
 	User &user = userStorage.find(userId)->second;
-	nannyLogInfo("Received VoiceRecorderNotify message " + std::to_string(user.getId()) + " notify type " + 
+	nannyLogInfo("Received VoiceRecorderNotify message " + std::to_string(userId) + " notify type " + 
                std::to_string(notifyRequest.notifyType));
 	if(notifyRequest.notifyType == static_cast<u8>(NotifyRequestType::registerNotify))
 	{
-		user.registerForVoiceRecorderNotify();
+    if( isChainEvent )
+      chainEventId = userId;
+    else
+      user.registerForVoiceRecorderNotify();
+
     event::Event* startRecording = reinterpret_cast<event::Event*>(allocate<MicrophoneData>());
     startRecording->type = event::EventType::VoiceRecorderEvent;
     MicrophoneData *mc_data = reinterpret_cast<MicrophoneData*>(startRecording->payload);
@@ -243,12 +254,20 @@ void Nanny::notifyAllRequestingUsers()
 	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocateNanny<NannyResponse,CameraData>());
 
   json j;
-  j["notifyType"] = 0;
+  j["notifyType"] = 2;
   j["status"] = 1;
 
 	vrResponse->size = j.dump().size();
   nannyLogInfo("Message " + j.dump() + " message size " + std::to_string(j.dump().size()));
 	memcpy(vrResponse->data,j.dump().c_str(),vrResponse->size);
+
+  if(chainEventId != 0)
+  {
+    nannyLogInfo("Sending info to chainedEvent " + std::to_string(chainEventId));
+    event::EventQueue::getInstance().sendResponse(chainEventId,new json(j));
+    chainEventId = 0;
+  }
+
 	std::map<u32,User>::iterator it;
 	for ( it = userStorage.begin(); it != userStorage.end(); it++ )
 	{

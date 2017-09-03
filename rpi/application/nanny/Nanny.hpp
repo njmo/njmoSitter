@@ -30,6 +30,8 @@
 #include <nanny/User.hpp>
 #include <utils/Time.hpp>
 
+#include "ChainEventController.hpp"
+
 // downloaded from https://github.com/nlohmann/json
 #include <utils/json.hpp>
 using nlohmann::json;
@@ -58,7 +60,7 @@ private:
   void sendBroadcastRequest();
   void sendResponseJson( u8,  u8);
 
-	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32);
+	void handleUserRequestForVoiceRecorderNotify( const NotifyRequest&, u32,bool);
 	void handleUserRequestForCaptureCamera( const CameraRequest &, u32);
   void handleUserRequesstForMusicPlayer(const MusicPlayerData &,u32);
   void handleMotorRequest(const MotorRequest &);
@@ -70,6 +72,8 @@ private:
 	u16 currentTimeStep;
 	u16 sendedFps;
 	std::map<u32,User> userStorage;
+  u32 chainEventId;
+  ChainEventController chainEventController;
 };
 
 } /* namespace app */

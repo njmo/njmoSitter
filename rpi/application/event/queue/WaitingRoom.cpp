@@ -30,6 +30,7 @@ void WaitingRoom::notifyWaiter(u32 sender,void* data)
 	auto waiter = waiters.find(sender);
 	if(waiter != waiters.end())
 	{
+    lock.~lock_guard();
 		waiter->second->notify(data);
 		if ( sender > 101 )
 			waiters.erase(sender);

@@ -6,6 +6,7 @@
  */
 
 #include "PhoneThread.hpp"
+#include <stdlib.h>
 
 PhoneThread::PhoneThread(int _socket,struct sockaddr_in* _saddr)
 	: std::thread(&PhoneThread::test, this),
@@ -98,6 +99,9 @@ void PhoneThread::test()
 			NannyResponse *response = requestList.front();
 			requestList.pop_front();
 			const u32 size = response->size;
+      int sizetab[1];
+      sizetab[0] = size;
+			write(socket,sizetab,sizeof(int));
 			if( write(socket,response->data,size) < size )
 				nannyLogError("Error sending data to client");
 			fps++;

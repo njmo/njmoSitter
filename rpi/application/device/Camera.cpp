@@ -6,6 +6,7 @@
  */
 
 #include "Camera.hpp"
+#include <iostream>
 
 namespace device {
 
@@ -34,12 +35,12 @@ void Camera::getFrame(CameraCaptureResponse &response)
 	compression_params.push_back(jpegqual);
 
 	imencode(".jpg", send, encoded, compression_params);
-	//imshow("send", send);
+//	imshow("send", send);
 	int total_pack = 1 + (encoded.size() - 1) / 4096 ;
 
-	const u32 sizeOfFrame = encoded.size();
+	const u32 sizeOfFrame = encoded.size() - 1;
 	response.size = sizeOfFrame;
-	memcpy(response.frame,&encoded,sizeOfFrame);
+	memcpy(response.frame,&encoded[0],sizeOfFrame);
 	u32 msPassed = timer.getMilisecondPassed();
 }
 

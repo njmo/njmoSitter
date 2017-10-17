@@ -293,7 +293,7 @@ void Nanny::sendCameraCapture()
 	checkVR->type = event::EventType::CameraCaptureFrame;
 	CameraCaptureResponse * response = reinterpret_cast<CameraCaptureResponse *>(event::EventQueue::getInstance().pushAndWaitForResponse(checkVR));
 
-	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocate((response->size*3) + sizeof(NannyResponse)));
+	NannyResponse* vrResponse = reinterpret_cast<NannyResponse*>(allocate(response->size + 7));
 	vrResponse->size = response->size;
   
 	memcpy(vrResponse->data,response->frame,response->size);

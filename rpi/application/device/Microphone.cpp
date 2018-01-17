@@ -3,8 +3,7 @@
 namespace device {
 
 Microphone::Microphone()
-  : isBabyCrying(false),
-		std::thread(&Microphone::detectCry, this),
+  : std::thread(&Microphone::detectCry, this),
     numberOfLoudFrames(0)
 {
 
@@ -16,9 +15,10 @@ void Microphone::initialize()
   u32 pcm;
   u32 rate = 44100;
 
+  nannyLogInfo("Microphone");
   const i32 channels = 2;
-  if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE_CAPTURE,
-            SND_PCM_STREAM_CAPTURE, 0) < 0) 
+  if ((pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE_CAPTURE,
+            SND_PCM_STREAM_CAPTURE, 0)) < 0) 
   {
     nannyLogError("ERROR: Can't open " + std::string(PCM_DEVICE_CAPTURE) + " PCM device. " + snd_strerror(pcm));
     state = failedOnConfigurationm; 
@@ -27,30 +27,30 @@ void Microphone::initialize()
 
   snd_pcm_hw_params_alloca(&params);
   snd_pcm_hw_params_any(pcm_handle, params);
-  if (pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
-            SND_PCM_ACCESS_RW_INTERLEAVED) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
+            SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) 
   {
     nannyLogError("ERROR: Can't set interleaved mode." + snd_strerror(pcm));
     state = failedOnConfigurationm; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_format(pcm_handle, params,
-            SND_PCM_FORMAT_S16_LE) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_format(pcm_handle, params,
+            SND_PCM_FORMAT_S16_LE)) < 0) 
   {
     nannyLogError("ERROR: Can't set format." + snd_strerror(pcm));
     state = failedOnConfigurationm; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels)) < 0) 
   {
     nannyLogError("ERROR: Can't set channels number. " + snd_strerror(pcm));
     state = failedOnConfigurationm; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_rate(pcm_handle, params, rate, 0) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_rate(pcm_handle, params, rate, 0)) < 0) 
   {
     nannyLogError("ERROR: Can't set rate." + snd_strerror(pcm));
     state = failedOnConfigurationm; 
@@ -58,7 +58,7 @@ void Microphone::initialize()
   }
 
   /* Write parameters */
-  if (pcm = snd_pcm_hw_params(pcm_handle, params) < 0)
+  if ((pcm = snd_pcm_hw_params(pcm_handle, params)) < 0)
   {
     nannyLogError("ERROR: Can't set harware parameters." + snd_strerror(pcm));
     state = failedOnConfigurationm; 
@@ -84,16 +84,19 @@ void Microphone::detectCry()
       ;
     if (snd_pcm_readi (pcm_handle, buffer, size/2) == size/2)
     {
+        float sum = 0.0f;
         // Compute the maximum peak value
         for (int i = 0; i < size; ++i)
         {
             // Substitute better algorithm here if needed
             float s = buffer[i] / 32768.0f;
             if (s < 0) s *= -1;
-            if (result < s) result = s;
+            sum+=s;
         }
+        result = sum/512;
     } 
-    if(result > 0.005)
+
+    if(result > 0.30)
       numberOfLoudFrames++;
     result = 0;
   }
@@ -108,7 +111,8 @@ void Microphone::stopRecording()
 }
 bool Microphone::isCrying()
 {
-  bool isCryin = numberOfLoudFrames > 50;
+  bool isCryin = numberOfLoudFrames > 0;
+  nannyLogInfo("number of loud frames" + std::to_string(numberOfLoudFrames));
   numberOfLoudFrames = 0;
   return isCryin;
 }

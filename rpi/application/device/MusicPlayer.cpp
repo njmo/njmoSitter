@@ -25,8 +25,9 @@ void MusicPlayer::initialize()
   snd_pcm_hw_params_t *params;
   u32 rate = 44100;
   const i32 channels = 2;
-  if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE,
-            SND_PCM_STREAM_PLAYBACK, 0) < 0) 
+  nannyLogInfo("MusicPlayer");
+  if ((pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE,
+            SND_PCM_STREAM_PLAYBACK, 0)) < 0) 
   {
     nannyLogError("ERROR: Can't open " + std::string(PCM_DEVICE) + " PCM device. " + snd_strerror(pcm));
     state = failedOnConfiguration; 
@@ -35,30 +36,30 @@ void MusicPlayer::initialize()
 
   snd_pcm_hw_params_alloca(&params);
   snd_pcm_hw_params_any(pcm_handle, params);
-  if (pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
-            SND_PCM_ACCESS_RW_INTERLEAVED) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
+            SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) 
   {
     nannyLogError("ERROR: Can't set interleaved mode." + snd_strerror(pcm));
     state = failedOnConfiguration; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_format(pcm_handle, params,
-            SND_PCM_FORMAT_S16_LE) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_format(pcm_handle, params,
+            SND_PCM_FORMAT_S16_LE)) < 0) 
   {
     nannyLogError("ERROR: Can't set format." + snd_strerror(pcm));
     state = failedOnConfiguration; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels)) < 0) 
   {
     nannyLogError("ERROR: Can't set channels number. " + snd_strerror(pcm));
     state = failedOnConfiguration; 
     return ;
   }
 
-  if (pcm = snd_pcm_hw_params_set_rate(pcm_handle, params, rate, 0) < 0) 
+  if ((pcm = snd_pcm_hw_params_set_rate(pcm_handle, params, rate, 0)) < 0) 
   {
     nannyLogError("ERROR: Can't set rate." + snd_strerror(pcm));
     state = failedOnConfiguration; 
@@ -66,7 +67,7 @@ void MusicPlayer::initialize()
   }
 
   /* Write parameters */
-  if (pcm = snd_pcm_hw_params(pcm_handle, params) < 0)
+  if ((pcm = snd_pcm_hw_params(pcm_handle, params)) < 0)
   {
     nannyLogError("ERROR: Can't set harware parameters." + snd_strerror(pcm));
     state = failedOnConfiguration; 
@@ -80,7 +81,7 @@ void MusicPlayer::initialize()
   state = configured;
 //  play("/home/pi/songs/wogrodku.wav");
 //  MIXER INITIALIZATION
-  if( pcm = snd_mixer_open(&mix_handle, 0) < 0)
+  if( (pcm = snd_mixer_open(&mix_handle, 0)) < 0)
   {
     nannyLogError("ERROR: Can't open mixer. : " + snd_strerror(pcm));
     state = failedOnConfiguration;
@@ -131,7 +132,7 @@ void MusicPlayer::initialize()
 void MusicPlayer::changeVolume(u8 volume)
 {
   u32 v;
-  if (v = snd_mixer_selem_set_playback_volume_all(mix_elem,volume) < 0)
+  if ((v = snd_mixer_selem_set_playback_volume_all(mix_elem,volume)) < 0)
   {
     nannyLogError("Error during volume change! " + snd_strerror(v));
     return;

@@ -82,7 +82,30 @@ public class NannyConnector implements Runnable{
 
         return nannyAddress;
     }
+    public void sendMusicRequest()
+    {
+        if ( socket == null )
+            return;
 
+        JSONObject musicRequest = nannyMessage.createMusicRequest();
+        try {
+            socket.getOutputStream().write(musicRequest.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendMotorRequest()
+    {
+        if ( socket == null )
+            return;
+
+        JSONObject motorRequest = nannyMessage.createMotorRequest();
+        try {
+            socket.getOutputStream().write(motorRequest.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void sendCameraRequest()
     {
         if ( socket == null )
@@ -95,6 +118,19 @@ public class NannyConnector implements Runnable{
             e.printStackTrace();
         }
     }
+    public void sendNotifyRequest()
+    {
+        if ( socket == null )
+            return;
+
+        JSONObject notify = nannyMessage.createNotificationRequestMessage();
+        try {
+            socket.getOutputStream().write(notify.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Pair<Integer,byte[]> readBytesFromNanny()
     {
         byte[] data = new byte[4];
@@ -144,7 +180,15 @@ public class NannyConnector implements Runnable{
 
             if(nannyData.first.intValue() < 1000)
             {
-                nannyMessage.processMessage(nannyData.second);
+                try {
+                    nannyMessage.processMessage(nannyData.second);
+                } catch ( NotificationException e )
+                {
+                    activity.showNotification();
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
                 continue;
             }
             else

@@ -8,7 +8,7 @@
 #include <math.h>
 #include <thread>
 
-#define PCM_DEVICE_CAPTURE "plughw:CARD=II,DEV=0"
+#define PCM_DEVICE_CAPTURE "hw:1"
 #define BUFFER_SIZE 1024
 
 
@@ -36,7 +36,6 @@ public:
 
 private:
   double rms(short *buffer);
-  volatile bool isBabyCrying;
   volatile  MicrophoneState state;
   volatile u64 numberOfLoudFrames;
   u64 frames;

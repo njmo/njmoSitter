@@ -18,7 +18,7 @@
 #include <thread>
 
 namespace device {
-#define PCM_DEVICE "hw:CARD=II"
+#define PCM_DEVICE "hw:2"
 
 enum PlayerState
 {
